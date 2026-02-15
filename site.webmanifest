@@ -1,6 +1,8 @@
 {
-  "name": "WithoutBall",
+  "name": "WithoutBall — The Intelligence Layer for Modern Football",
   "short_name": "WithoutBall",
+  "description": "AI + big data platform that turns raw football movement into winning insights.",
+  "start_url": "/",
   "icons": [
     {
       "src": "favicons/android-chrome-192x192.png",
@@ -15,5 +17,6 @@
   ],
   "theme_color": "#05060A",
   "background_color": "#05060A",
-  "display": "standalone"
+  "display": "standalone",
+  "categories": ["sports", "analytics", "productivity"]
 }
