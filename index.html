@@ -2,9 +2,9 @@
 <html lang="en" data-theme="neon">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>withoutball &mdash; AI-Powered Football Intelligence</title>
-    <meta name="description" content="From personal biomechanics to professional match analytics. One AI-powered platform that transforms raw movement data into winning insights.">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title></title>
+    <meta name="description" content="">
     <meta name="color-scheme" content="dark">
     <meta name="theme-color" content="#05060A">
 
@@ -21,7 +21,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2363FF4B'/%3E%3Cstop offset='1' stop-color='%23B455FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%2305060A'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='12' fill='none' stroke='url(%23g)' stroke-width='2' stroke-dasharray='3 3' opacity='0.7'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%2363FF4B'/%3E%3C/svg%3E">
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="msapplication-TileImage" content="favicons/mstile-150x150.png">
+    <meta name="msapplication-TileColor" content="#05060A">
 
     <style>
         /* ==========================================================
@@ -49,6 +57,8 @@
             --accent-rgb: 99,255,75;
             --violet-rgb: 180,85,255;
             --blue-rgb:   45,212,191;
+            --amber-rgb:  245,158,11;
+            --red-rgb:    239,68,68;
 
             /* ---- Surfaces ---- */
             --bg:        #05060A;
@@ -65,7 +75,11 @@
             --border: rgba(255,255,255,0.065);
 
             /* ---- Layout tokens ---- */
+            --layout-max-w: 1120px;
             --nav-h:      72px;
+            --safe-top:   env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --nav-total-h: calc(var(--nav-h) + var(--safe-top));
             --section-py: clamp(80px, 12vw, 160px);
 
             /* ---- Derived glow tokens (auto-adapts per theme) ---- */
@@ -81,8 +95,19 @@
 
         /* ========== RESET ========== */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: auto; }
+        html {
+            scroll-behavior: auto;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            width: 100%;
+            scroll-padding-top: calc(var(--nav-total-h) + 16px);
+            overflow-x: hidden;
+            overflow-x: clip;
+        }
         body {
+            width: 100%;
+            overflow-x: hidden;
+            overflow-x: clip;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: var(--bg);
             background-image:
@@ -91,7 +116,6 @@
                 radial-gradient(ellipse 70% 40% at 10% 100%, rgba(var(--blue-rgb),0.02) 0%, transparent 55%);
             color: var(--text);
             line-height: 1.6;
-            overflow-x: hidden;
             position: relative;
             isolation: isolate;
             -webkit-font-smoothing: antialiased;
@@ -126,6 +150,7 @@
         ul { list-style: none; }
         input { font-family: inherit; }
         :focus-visible { outline: 2px solid rgba(var(--accent-rgb),0.55); outline-offset: 3px; }
+        :where(section[id]) { scroll-margin-top: calc(var(--nav-total-h) + 16px); }
 
         /* ========== FILM GRAIN OVERLAY ========== */
         body::after {
@@ -140,7 +165,12 @@
         }
 
         /* ========== UTILITY CLASSES ========== */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 40px); }
+        .container {
+            width: min(100%, var(--layout-max-w));
+            margin: 0 auto;
+            padding-left: max(clamp(16px, 3.5vw, 40px), env(safe-area-inset-left, 0px));
+            padding-right: max(clamp(16px, 3.5vw, 40px), env(safe-area-inset-right, 0px));
+        }
         .sr-only {
             position: absolute !important;
             width: 1px; height: 1px;
@@ -197,34 +227,67 @@
 
         /* ========== SCROLL PROGRESS BAR ========== */
         .scroll-progress {
-            position: fixed; top: var(--nav-h); left: 0; width: 100%; height: 2px;
+            position: fixed; top: var(--nav-total-h); left: 0; width: 100%; height: 2px;
             background: linear-gradient(90deg, var(--accent), var(--violet));
             transform-origin: left; transform: scaleX(0); z-index: 9999;
         }
 
         /* ========== NAV ========== */
         .nav {
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-h);
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-total-h);
             z-index: 9998; display: flex; align-items: center;
             background: rgba(5,7,10,0.6);
             backdrop-filter: blur(20px) saturate(1.4);
             -webkit-backdrop-filter: blur(20px) saturate(1.4);
             border-bottom: 1px solid var(--border);
             transition: background 0.4s;
+            padding-top: var(--safe-top);
         }
         .nav.scrolled { background: rgba(5,7,10,0.92); }
         .nav .container { display: flex; align-items: center; justify-content: space-between; width: 100%; }
-        .nav-brand { display: flex; align-items: center; gap: 12px; }
-        .nav-brand svg { width: 36px; height: 36px; flex-shrink: 0; }
-        .nav-wordmark { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -0.02em; }
-        .nav-center { display: flex; align-items: center; justify-content: center; gap: 32px; flex: 1; }
+        .nav-brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+        .nav-brand img.nav-logo { width: 36px; height: 36px; flex-shrink: 0; filter: brightness(0) invert(1); }
+        .nav-wordmark { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -0.02em; white-space: nowrap; }
+        .nav-center { display: flex; align-items: center; justify-content: center; gap: 32px; flex: 1; min-width: 0; }
         .nav-center a {
             font-size: 0.85rem; color: var(--text-dim); transition: color 0.3s; font-weight: 400;
         }
         .nav-center a:hover { color: var(--text); }
 
-        .nav-end { display: flex; align-items: center; gap: 12px; }
+        @media (max-width: 1280px) {
+            .nav-center { gap: 20px; }
+            .nav-center a { font-size: 0.82rem; }
+        }
+
+        .nav-end { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
         .nav-right { display: flex; align-items: center; gap: 0; }
+        .nav-menu-btn {
+            display: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.02);
+            color: var(--text);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            transition: transform 0.25s, border-color 0.25s, background 0.25s;
+            backdrop-filter: blur(18px) saturate(1.4);
+            -webkit-backdrop-filter: blur(18px) saturate(1.4);
+        }
+        .nav-menu-btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.14); background: rgba(255,255,255,0.03); }
+        .nav-menu-btn-line {
+            width: 18px;
+            height: 2px;
+            border-radius: 2px;
+            background: currentColor;
+            transition: transform 0.3s ease, opacity 0.2s ease;
+        }
+        .nav.menu-open .nav-menu-btn-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .nav.menu-open .nav-menu-btn-line:nth-child(2) { opacity: 0; }
+        .nav.menu-open .nav-menu-btn-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
         .nav-cta {
             height: 40px;
@@ -242,7 +305,6 @@
             letter-spacing: 0.01em;
         }
         .nav-cta:hover { background: var(--accent-hover); box-shadow: 0 0 24px var(--accent-glow); transform: translateY(-1px); }
-        .nav-actions { display: flex; align-items: center; gap: 12px; }
         .icon-btn {
             width: 40px; height: 40px; border-radius: 10px;
             border: 1px solid var(--border);
@@ -289,39 +351,94 @@
             pointer-events: none;
             color: var(--text-muted);
         }
-
-        .nav-toggle {
-            display: none; flex-direction: column; gap: 5px; width: 40px; height: 40px;
-            padding: 0; align-items: center; justify-content: center;
-            border-radius: 10px; border: 1px solid var(--border);
-            background: rgba(255,255,255,0.02);
-            transition: transform 0.25s, border-color 0.25s, background 0.25s;
+        .nav-mobile-overlay {
+            position: fixed;
+            inset: var(--nav-total-h) 0 0 0;
+            z-index: 9996;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            background: rgba(var(--bg-rgb), 0.72);
         }
-        .nav-toggle span {
-            display: block; width: 18px; height: 2px; background: var(--text);
-            transition: all 0.3s; border-radius: 2px;
+        .nav-mobile-overlay[data-open="true"] {
+            opacity: 1;
+            pointer-events: auto;
         }
-        .nav-toggle:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.14); background: rgba(255,255,255,0.03); }
-        .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .nav-toggle.active span:nth-child(2) { opacity: 0; }
-        .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-        .mobile-menu {
-            display: none; position: fixed; top: var(--nav-h); left: 0; width: 100%; height: calc(100vh - var(--nav-h));
-            background: rgba(5,7,10,0.97); backdrop-filter: blur(20px);
-            flex-direction: column; align-items: center; justify-content: center; gap: 28px;
-            z-index: 9997; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        .nav-mobile {
+            position: fixed;
+            top: var(--nav-total-h);
+            left: 0;
+            right: 0;
+            z-index: 9997;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
         }
-        .mobile-menu.open { opacity: 1; pointer-events: all; }
-        .mobile-menu a { font-size: 1.2rem; color: var(--text-dim); transition: color 0.3s; }
-        .mobile-menu a:hover { color: var(--text); }
-        .mobile-menu a.nav-cta { color: var(--bg); }
-
+        .nav-mobile[data-open="true"] {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .nav-mobile-shell {
+            margin-top: 10px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 20px;
+            background: rgba(9, 12, 20, 0.95);
+            backdrop-filter: blur(20px) saturate(1.35);
+            -webkit-backdrop-filter: blur(20px) saturate(1.35);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+        }
+        .nav-mobile-links {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+        .nav-mobile-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            transition: color 0.2s;
+        }
+        .nav-mobile-link::after {
+            content: '→';
+            color: var(--text-muted);
+            transition: transform 0.2s, color 0.2s;
+        }
+        .nav-mobile-link:hover { color: var(--text); }
+        .nav-mobile-link:hover::after { color: var(--accent); transform: translateX(2px); }
+        .nav-mobile-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .nav-mobile-actions .nav-cta {
+            border-radius: 10px;
+            padding: 0 20px;
+            min-width: 184px;
+        }
+        .nav-mobile-actions .lang-wrap { flex: 1; min-width: 110px; }
+        .nav-mobile-actions .lang-select {
+            width: 100%;
+            border-left: 1px solid var(--border);
+            border-radius: 10px;
+        }
+        body.menu-open { overflow: hidden; }
 
         /* ========== HERO ========== */
         .hero {
-            position: relative; min-height: 100vh; display: flex; align-items: center;
-            justify-content: center; padding: calc(var(--nav-h) + 40px) 0 60px; overflow: hidden;
+            position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center;
+            justify-content: center; padding: calc(var(--nav-total-h) + 40px) 0 60px; overflow: hidden;
             isolation: isolate;
         }
         .hero::before {
@@ -604,49 +721,30 @@
         .audience-feature .check.violet { background: rgba(139,92,246,0.1); color: var(--violet); }
         .audience-feature .check svg { width: 10px; height: 10px; }
 
-        /* ========== FEATURES HORIZONTAL SCROLL ========== */
+        /* ========== FEATURES GRID ========== */
         .features-section { padding: var(--section-py) 0; }
-        .features-header { margin-bottom: 48px; }
-        .features-h-wrap { position: relative; overflow: visible; }
-        .features-h-track {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 clamp(20px, 4vw, 40px);
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 24px;
+        .features-header { margin-bottom: 56px; }
+        .cap-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
         }
-        .feature-card {
-            width: 100%;
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: 20px; padding: 36px 28px; position: relative; overflow: hidden;
-            transition: transform 0.3s, border-color 0.3s;
+        .cap-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+            padding: 36px 28px; position: relative; overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), border-color 0.4s;
         }
-        .feature-card:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-4px); }
-        .feature-card::before {
+        .cap-card::before {
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--violet), transparent);
             opacity: 0; transition: opacity 0.4s;
         }
-        .feature-card:hover::before { opacity: 1; }
-        .feature-card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent), transparent); }
-        .feature-card:nth-child(2)::before { background: linear-gradient(90deg, var(--violet), transparent); }
-        .feature-card:nth-child(3)::before { background: linear-gradient(90deg, var(--blue), transparent); }
-        .feature-card:nth-child(4)::before { background: linear-gradient(90deg, var(--amber), transparent); }
-        .feature-card:nth-child(5)::before { background: linear-gradient(90deg, var(--red), transparent); }
-        .feature-card:nth-child(6)::before { background: linear-gradient(90deg, var(--text), transparent); }
-        .feature-icon {
-            width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center;
-            justify-content: center; margin-bottom: 20px;
+        .cap-card:hover::before { opacity: 1; }
+        .cap-card:hover { border-color: rgba(255,255,255,0.1); }
+        .cap-card-label {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;
         }
-        .feature-icon svg { width: 24px; height: 24px; }
-        .feature-icon.fi-green { background: rgba(0,232,123,0.1); color: var(--accent); }
-        .feature-icon.fi-violet { background: rgba(139,92,246,0.1); color: var(--violet); }
-        .feature-icon.fi-blue { background: rgba(59,130,246,0.1); color: var(--blue); }
-        .feature-icon.fi-amber { background: rgba(245,158,11,0.1); color: var(--amber); }
-        .feature-icon.fi-red { background: rgba(239,68,68,0.1); color: var(--red); }
-        .feature-icon.fi-white { background: rgba(226,232,240,0.06); color: var(--text); }
-        .feature-card-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; }
-        .feature-card-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.65; }
+        .cap-card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 14px; }
+        .cap-card-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.65; }
         .features-progress { display: none; }
 
         /* ========== PLATFORM PREVIEW ========== */
@@ -813,11 +911,38 @@
         .cta-submit {
             background: var(--accent); color: var(--bg); font-weight: 600; font-size: 0.9rem;
             padding: 14px 28px; border-radius: 10px; white-space: nowrap; transition: all 0.3s;
+            position: relative;
         }
         .cta-submit:hover { background: var(--accent-hover); box-shadow: 0 0 24px var(--accent-glow); }
-        .cta-success {
-            display: none; color: var(--accent); font-size: 0.9rem; font-weight: 500; margin-top: 16px;
+        .cta-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+        .cta-submit:disabled:hover { box-shadow: none; }
+        .cta-submit .cta-spinner {
+            display: inline-block; width: 16px; height: 16px; border: 2px solid transparent;
+            border-top-color: var(--bg); border-radius: 50%; animation: cta-spin 0.6s linear infinite;
+            vertical-align: middle;
+        }
+        @keyframes cta-spin { to { transform: rotate(360deg); } }
+        .cta-msg {
+            font-size: 0.85rem; font-weight: 500; margin-top: 14px;
             font-family: 'JetBrains Mono', monospace;
+            opacity: 0; transform: translateY(6px);
+            transition: opacity 0.4s, transform 0.4s;
+        }
+        .cta-msg.visible { opacity: 1; transform: translateY(0); }
+        .cta-msg.success { color: var(--accent); }
+        .cta-msg.error { color: #f87171; }
+        .cta-hp {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            border: 0;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            clip-path: inset(50%);
+            white-space: nowrap;
+            opacity: 0;
         }
 
         /* ========== FOOTER ========== */
@@ -831,62 +956,171 @@
         .footer-left a { color: var(--text-dim); text-decoration: underline; text-underline-offset: 3px;
             transition: color 0.3s; }
         .footer-left a:hover { color: var(--accent); }
-        .footer-right { display: flex; gap: 24px; }
+        .footer-right { display: flex; gap: 24px; flex-wrap: wrap; justify-content: flex-end; }
         .footer-right a { font-size: 0.82rem; color: var(--text-dim); transition: color 0.3s; }
         .footer-right a:hover { color: var(--text); }
 
-        /* ========== RESPONSIVE ========== */
-        @media (max-width: 900px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .stat-card:nth-child(2) { border-right: none; }
-            .stat-card:nth-child(1), .stat-card:nth-child(2) { border-bottom: 1px solid var(--border); }
-            .founders-grid { grid-template-columns: repeat(2, 1fr); }
-            .solutions-grid { grid-template-columns: 1fr; }
-            .features-h-track { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .how-grid { grid-template-columns: 1fr; gap: 40px; }
-            .how-connector { display: none; }
-            .tech-grid { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 680px) {
-            .nav-center { display: none; }
-            .nav-toggle { display: flex; }
-            .mobile-menu { display: flex; }
-            .nav-right .nav-cta { display: none; }
-            .lang-select {
-                border-left: 1px solid var(--border);
-                border-top-left-radius: 10px;
-                border-bottom-left-radius: 10px;
-            }
-            .hero-buttons { flex-direction: column; align-items: stretch; }
-            .hero-buttons a, .hero-buttons button { text-align: center; justify-content: center; }
-            #pitch-canvas { height: 280px; }
-            .footer .container { flex-direction: column; gap: 16px; text-align: center; }
-            .cta-form { flex-direction: column; }
-            .features-h-track { grid-template-columns: 1fr; }
-            .founders-grid { grid-template-columns: 1fr; }
-            .preview-stats { display: none; }
-            .preview-title { display: none; }
-        }
-
-        @media (max-width: 420px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .stat-card:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border); }
-            .hero-title { font-size: clamp(2.2rem, 9.5vw, 3.3rem); }
-        }
-        @media (max-width: 360px) {
-            .hero-title { font-size: clamp(2.0rem, 10.5vw, 3.05rem); }
-        }
-
         /* ========== SECTION DIVIDERS ========== */
         .divider {
-            height: 1px; max-width: 1200px; margin: 0 auto;
+            height: 1px; max-width: var(--layout-max-w); margin: 0 auto;
             background: linear-gradient(90deg, transparent, var(--border), transparent);
         }
 
         /* ========== REVEAL HELPERS ========== */
-        .reveal { opacity: 0; transform: translateY(40px); }
-        .reveal-hero { opacity: 0; }
+        .reveal { will-change: transform, opacity; }
+
+        @media (max-width: 1100px) {
+            .nav-center,
+            .nav-end { display: none; }
+            .nav-menu-btn { display: inline-flex; }
+            .nav-mobile { display: block; }
+        }
+
+        /* ========== RESPONSIVE LAYOUT ========== */
+        /* Global desktop-grid breakpoint (3 cols -> 2 cols): change this one value */
+        @media (max-width: 900px) {
+            .founders-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .cap-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .preview-right { gap: 10px; }
+        }
+
+        @media (max-width: 900px) {
+            :root {
+                --nav-h: 68px;
+                --section-py: clamp(64px, 10vw, 112px);
+            }
+            .nav-wordmark { font-size: 1.05rem; }
+            .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .stat-card { border-right: 1px solid var(--border); }
+            .stat-card:nth-child(2n) { border-right: none; }
+            .stat-card:nth-child(-n + 2) { border-bottom: 1px solid var(--border); }
+            .how-grid { grid-template-columns: 1fr; gap: 16px; }
+            .how-connector { display: none; }
+            .how-step {
+                text-align: left;
+                padding: 24px 20px;
+                border-radius: 16px;
+                border: 1px solid var(--border);
+                background: rgba(10, 14, 26, 0.78);
+                backdrop-filter: blur(16px) saturate(1.25);
+                -webkit-backdrop-filter: blur(16px) saturate(1.25);
+            }
+            .how-num { margin: 0 0 16px; width: 64px; height: 64px; font-size: 1rem; }
+            .preview-chrome {
+                flex-wrap: wrap;
+                gap: 12px;
+                align-items: flex-start;
+            }
+            .preview-title {
+                order: 3;
+                width: 100%;
+                text-align: left;
+            }
+            .preview-right { width: 100%; justify-content: space-between; }
+        }
+
+        @media (max-width: 720px) {
+            .stats-grid,
+            .founders-grid,
+            .solutions-grid,
+            .cap-grid,
+            .tech-grid { grid-template-columns: 1fr; }
+
+            .founders-grid,
+            .solutions-grid,
+            .cap-grid,
+            .tech-grid { gap: 16px; }
+
+            .stats-grid .stat-card { border-right: none; border-bottom: none; }
+            .stats-grid .stat-card:not(:last-child) { border-bottom: 1px solid var(--border); }
+            .stats-grid .stat-card:nth-child(2n),
+            .stats-grid .stat-card:nth-child(-n + 2) { border-right: none; border-bottom: 1px solid var(--border); }
+            .stats-grid .stat-card:last-child { border-bottom: none; }
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                min-height: auto;
+                padding: calc(var(--nav-total-h) + 26px) 0 48px;
+            }
+            .hero-content { padding: 0 16px; }
+            .hero-badge { margin-bottom: 22px; }
+            .hero-title { font-size: clamp(2rem, 11vw, 3.1rem); }
+            .hero-subtitle { font-size: 0.96rem; margin-bottom: 14px; }
+            .hero-chips { margin-bottom: 30px; gap: 8px; }
+            .hero-chip { font-size: 0.68rem; padding: 7px 10px; }
+            .stat-card { padding: 30px 18px; }
+            .preview-dots,
+            .preview-stats { display: none; }
+            #pitch-canvas { height: clamp(260px, 48vw, 380px); }
+            .cta-form { flex-direction: column; max-width: 100%; }
+            .cta-submit { width: 100%; }
+            .footer .container { flex-direction: column; align-items: flex-start; gap: 14px; }
+            .footer-right { justify-content: flex-start; gap: 14px 18px; }
+        }
+
+        @media (max-width: 560px) {
+            .section-title { font-size: clamp(1.7rem, 9vw, 2.2rem); }
+            .section-desc { font-size: 0.9rem; }
+            .founder-card,
+            .audience-card,
+            .cap-card,
+            .tech-card { padding: 26px 20px; }
+            .how-step { padding: 22px 18px; }
+            .founder-avatar { width: 52px; height: 52px; margin-bottom: 16px; }
+            .founder-name { font-size: 1rem; }
+            .founder-role { margin-bottom: 12px; }
+
+            .audience-icon { width: 46px; height: 46px; border-radius: 12px; margin-bottom: 16px; }
+            .audience-card-title { font-size: 1.15rem; }
+            .audience-card-desc { margin-bottom: 18px; }
+            .audience-features { gap: 10px; }
+            .audience-feature { font-size: 0.85rem; }
+
+            .cap-card-title,
+            .tech-card-title { font-size: 1.1rem; }
+
+            /* Mobile: reduce "wall of cards" heaviness with clearer separation */
+            .founder-card,
+            .audience-card,
+            .cap-card,
+            .tech-card,
+            .how-step,
+            .cta-box,
+            .preview-window {
+                border-radius: 18px;
+                border-color: rgba(255,255,255,0.085);
+                background: linear-gradient(180deg, rgba(18,26,43,0.88), rgba(10,14,26,0.72));
+                box-shadow:
+                    0 18px 50px rgba(0,0,0,0.28),
+                    inset 0 1px 0 rgba(255,255,255,0.035);
+            }
+            .audience-card { border-radius: 18px; }
+            .how-step { backdrop-filter: none; -webkit-backdrop-filter: none; }
+
+            .tech-tags {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior-x: contain;
+                padding-bottom: 2px;
+                scrollbar-width: none;
+            }
+            .tech-tags::-webkit-scrollbar { display: none; }
+            .tech-tag { white-space: nowrap; flex: 0 0 auto; }
+
+            .preview-chrome { padding: 12px 14px; }
+            .preview-right {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .preview-modes,
+            .preview-stats { width: 100%; justify-content: space-between; }
+            .nav-mobile-shell { padding: 16px; margin-top: 8px; }
+            .nav-mobile-actions .nav-cta,
+            .nav-mobile-actions .lang-wrap { width: 100%; min-width: 0; }
+            .scroll-hint { display: none; }
+        }
 
         /* ========== REDUCED MOTION ========== */
         @media (prefers-reduced-motion: reduce) {
@@ -907,35 +1141,24 @@
     <!-- ========== NAV ========== -->
     <nav class="nav" id="nav">
         <div class="container">
-            <a href="#" class="nav-brand" aria-label="withoutball home" data-i18n-attr="aria-label:nav.home">
-                <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="18" cy="18" r="16.5" stroke="url(#nav-grad)" stroke-width="1.5"/>
-                    <circle cx="18" cy="18" r="12" stroke="url(#nav-grad)" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.5"/>
-                    <circle cx="18" cy="18" r="3" fill="var(--accent)"/>
-                    <line x1="18" y1="6" x2="18" y2="30" stroke="var(--accent)" stroke-width="0.5" opacity="0.3"/>
-                    <line x1="6" y1="18" x2="30" y2="18" stroke="var(--accent)" stroke-width="0.5" opacity="0.3"/>
-                    <defs>
-                        <linearGradient id="nav-grad" x1="0" y1="0" x2="36" y2="36">
-                            <stop stop-color="var(--accent)"/><stop offset="1" stop-color="var(--violet)"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-                <span class="nav-wordmark">withoutball</span>
+            <a href="#" class="nav-brand" data-i18n-attr="aria-label:nav.home">
+                <img src="logo.svg" alt="WithoutBall" class="nav-logo">
+                <span class="nav-wordmark">WithoutBall</span>
             </a>
             <div class="nav-center">
-                <a href="#solutions" data-i18n="nav.solutions">Solutions</a>
-                <a href="#features" data-i18n="nav.capabilities">Capabilities</a>
-                <a href="#preview" data-i18n="nav.preview">Preview</a>
-                <a href="#how" data-i18n="nav.how">How It Works</a>
-                <a href="#tech" data-i18n="nav.tech">Technology</a>
-                <a href="#founders" data-i18n="nav.team">Team</a>
+                <a href="#founders" data-i18n="nav.team"></a>
+                <a href="#solutions" data-i18n="nav.solutions"></a>
+                <a href="#features" data-i18n="nav.capabilities"></a>
+                <a href="#preview" data-i18n="nav.preview"></a>
+                <a href="#how" data-i18n="nav.how"></a>
+                <a href="#tech" data-i18n="nav.tech"></a>
             </div>
             <div class="nav-end">
                 <div class="nav-right">
-                    <a href="#cta" class="nav-cta magnetic" data-i18n="nav.cta">Get Early Access</a>
+                    <a href="#cta" class="nav-cta magnetic" data-i18n="nav.cta"></a>
                     <div class="lang-wrap">
-                        <label class="sr-only" for="langSelect" data-i18n="nav.language">Language</label>
-                        <select id="langSelect" class="lang-select" aria-label="Language" data-i18n-attr="aria-label:nav.language">
+                        <label class="sr-only" for="langSelect" data-i18n="nav.language"></label>
+                        <select id="langSelect" class="lang-select" data-i18n-attr="aria-label:nav.language">
                             <option value="en" selected>EN</option>
                             <option value="tr">TR</option>
                             <option value="de">DE</option>
@@ -945,24 +1168,48 @@
                         </svg>
                     </div>
                 </div>
-                <div class="nav-actions">
-                    <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false" data-i18n-attr="aria-label:nav.menu">
-                        <span></span><span></span><span></span>
-                    </button>
+            </div>
+            <button
+                class="nav-menu-btn"
+                id="navMenuBtn"
+                type="button"
+                aria-expanded="false"
+                aria-controls="navMobilePanel"
+                data-i18n-attr="aria-label:nav.menu_open">
+                <span class="nav-menu-btn-line" aria-hidden="true"></span>
+                <span class="nav-menu-btn-line" aria-hidden="true"></span>
+                <span class="nav-menu-btn-line" aria-hidden="true"></span>
+            </button>
+        </div>
+    </nav>
+    <div class="nav-mobile-overlay" id="navMobileOverlay" data-open="false"></div>
+    <div class="nav-mobile" id="navMobilePanel" data-open="false" aria-hidden="true">
+        <div class="container">
+            <div class="nav-mobile-shell">
+                <div class="nav-mobile-links">
+                    <a href="#founders" class="nav-mobile-link" data-i18n="nav.team"></a>
+                    <a href="#solutions" class="nav-mobile-link" data-i18n="nav.solutions"></a>
+                    <a href="#features" class="nav-mobile-link" data-i18n="nav.capabilities"></a>
+                    <a href="#preview" class="nav-mobile-link" data-i18n="nav.preview"></a>
+                    <a href="#how" class="nav-mobile-link" data-i18n="nav.how"></a>
+                    <a href="#tech" class="nav-mobile-link" data-i18n="nav.tech"></a>
+                </div>
+                <div class="nav-mobile-actions">
+                    <a href="#cta" class="nav-cta magnetic" data-i18n="nav.cta"></a>
+                    <div class="lang-wrap">
+                        <label class="sr-only" for="langSelectMobile" data-i18n="nav.language"></label>
+                        <select id="langSelectMobile" class="lang-select" data-i18n-attr="aria-label:nav.language">
+                            <option value="en" selected>EN</option>
+                            <option value="tr">TR</option>
+                            <option value="de">DE</option>
+                        </select>
+                        <svg class="lang-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="#solutions" class="mobile-link" data-i18n="nav.solutions">Solutions</a>
-        <a href="#features" class="mobile-link" data-i18n="nav.capabilities">Capabilities</a>
-        <a href="#preview" class="mobile-link" data-i18n="nav.preview">Preview</a>
-        <a href="#how" class="mobile-link" data-i18n="nav.how">How It Works</a>
-        <a href="#tech" class="mobile-link" data-i18n="nav.tech">Technology</a>
-        <a href="#founders" class="mobile-link" data-i18n="nav.team">Team</a>
-        <a href="#cta" class="nav-cta magnetic mobile-link" data-i18n="nav.cta">Get Early Access</a>
     </div>
 
     <!-- ========== HERO ========== -->
@@ -971,53 +1218,53 @@
         <div class="hero-grad-1"></div>
         <div class="hero-grad-2"></div>
         <div class="hero-fade"></div>
-        <div class="hero-content reveal-hero">
-            <div class="hero-badge">
-                <span class="hero-badge-dot"></span>
-                <span data-i18n="hero.badge">Next-Gen Football Intelligence · In Development</span>
-            </div>
-            <h1 class="hero-title">
-                <span class="line"><span class="line-inner" data-i18n="hero.title_1">The intelligence layer</span></span>
-                <span class="line"><span class="line-inner gradient-text" data-i18n="hero.title_2">for modern football.</span></span>
-            </h1>
-            <p class="hero-subtitle" data-i18n="hero.subtitle">From personal biomechanics to professional match analytics — a next-generation AI + big data platform that turns raw movement into winning insights.</p>
-            <div class="hero-chips">
-                <span class="hero-chip" data-i18n="hero.chip_1">Big Data at Scale</span>
-                <span class="hero-chip" data-i18n="hero.chip_2">Next-Gen AI</span>
-                <span class="hero-chip" data-i18n="hero.chip_3">Off-Ball Intelligence</span>
-                <span class="hero-chip" data-i18n="hero.chip_4">Real-Time Dashboards</span>
-            </div>
-            <div class="hero-buttons">
-                <a href="#cta" class="btn-primary magnetic" data-i18n="hero.primary">Request Early Access</a>
-                <a href="#solutions" class="btn-secondary magnetic" data-i18n="hero.secondary">Explore Platform</a>
-            </div>
-        </div>
-        <div class="scroll-hint">
-            <span class="scroll-hint-text" data-i18n="hero.scroll">Scroll</span>
-            <div class="scroll-hint-line"></div>
-        </div>
-    </section>
+	        <div class="hero-content reveal-hero">
+	            <div class="hero-badge">
+	                <span class="hero-badge-dot"></span>
+	                <span data-i18n="hero.badge"></span>
+	            </div>
+	            <h1 class="hero-title">
+	                <span class="line"><span class="line-inner" data-i18n="hero.title_1"></span></span>
+	                <span class="line"><span class="line-inner gradient-text" data-i18n="hero.title_2"></span></span>
+	            </h1>
+	            <p class="hero-subtitle" data-i18n="hero.subtitle"></p>
+	            <div class="hero-chips">
+	                <span class="hero-chip" data-i18n="hero.chip_1"></span>
+	                <span class="hero-chip" data-i18n="hero.chip_2"></span>
+	                <span class="hero-chip" data-i18n="hero.chip_3"></span>
+	                <span class="hero-chip" data-i18n="hero.chip_4"></span>
+	            </div>
+	            <div class="hero-buttons">
+	                <a href="#cta" class="btn-primary magnetic" data-i18n="hero.primary"></a>
+	                <a href="#solutions" class="btn-secondary magnetic" data-i18n="hero.secondary"></a>
+	            </div>
+	        </div>
+	        <div class="scroll-hint">
+	            <span class="scroll-hint-text" data-i18n="hero.scroll"></span>
+	            <div class="scroll-hint-line"></div>
+	        </div>
+	    </section>
 
     <!-- ========== MARQUEE ========== -->
     <section class="marquee-section">
         <div class="marquee-track">
-            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">2.4M+</span> <span data-i18n="marquee.data_points">Data Points Per Match</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.realtime">Real-Time</span> <span class="val">25 FPS</span> <span data-i18n="marquee.tracking">Tracking</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">92%</span> <span data-i18n="marquee.accuracy">Prediction Accuracy</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">17</span> <span data-i18n="marquee.keypoints">Skeleton Keypoints</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.pose">Pose Estimation</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.bigdata">Big Data Analytics</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.insights">AI-Powered Insights</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.tactical">Tactical Intelligence</span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">2.4M+</span> <span data-i18n="marquee.data_points"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.realtime"></span> <span class="val">25 FPS</span> <span data-i18n="marquee.tracking"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">92%</span> <span data-i18n="marquee.accuracy"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">17</span> <span data-i18n="marquee.keypoints"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.pose"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.bigdata"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.insights"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.tactical"></span></div>
             <!-- Duplicate for seamless loop -->
-            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">2.4M+</span> <span data-i18n="marquee.data_points">Data Points Per Match</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.realtime">Real-Time</span> <span class="val">25 FPS</span> <span data-i18n="marquee.tracking">Tracking</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">92%</span> <span data-i18n="marquee.accuracy">Prediction Accuracy</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">17</span> <span data-i18n="marquee.keypoints">Skeleton Keypoints</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.pose">Pose Estimation</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.bigdata">Big Data Analytics</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.insights">AI-Powered Insights</span></div>
-            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.tactical">Tactical Intelligence</span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">2.4M+</span> <span data-i18n="marquee.data_points"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.realtime"></span> <span class="val">25 FPS</span> <span data-i18n="marquee.tracking"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">92%</span> <span data-i18n="marquee.accuracy"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span class="val">17</span> <span data-i18n="marquee.keypoints"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.pose"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.bigdata"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.insights"></span></div>
+	            <div class="marquee-item"><span class="marquee-dot"></span><span data-i18n="marquee.tactical"></span></div>
         </div>
     </section>
 
@@ -1027,19 +1274,19 @@
             <div class="stats-grid reveal">
                 <div class="stat-card">
                     <span class="stat-number" data-count="2.4" data-suffix="M+">0</span>
-                    <span class="stat-label" data-i18n="stats.data_points">Data points per match</span>
+                    <span class="stat-label" data-i18n="stats.data_points"></span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number" data-count="17" data-suffix="">0</span>
-                    <span class="stat-label" data-i18n="stats.keypoints">Skeleton keypoints tracked</span>
+                    <span class="stat-label" data-i18n="stats.keypoints"></span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number" data-count="25" data-suffix="fps">0</span>
-                    <span class="stat-label" data-i18n="stats.inference">Real-time pose inference</span>
+                    <span class="stat-label" data-i18n="stats.inference"></span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-number" data-count="92" data-suffix="%">0</span>
-                    <span class="stat-label" data-i18n="stats.accuracy">Prediction accuracy</span>
+                    <span class="stat-label" data-i18n="stats.accuracy"></span>
                 </div>
             </div>
         </div>
@@ -1051,34 +1298,34 @@
     <section class="founders-section" id="founders">
         <div class="container">
             <div class="founders-header">
-                <div class="section-label reveal" data-i18n="team.label">Team</div>
-                <h2 class="section-title reveal" data-i18n="team.title">Built by people who understand the game.</h2>
-                <p class="section-desc reveal" data-i18n="team.desc">Machine learning researchers, engineers, and football professionals united by a shared vision for the future of the sport.</p>
+                <div class="section-label reveal" data-i18n="team.label"></div>
+                <h2 class="section-title reveal" data-i18n="team.title"></h2>
+                <p class="section-desc reveal" data-i18n="team.desc"></p>
             </div>
             <div class="founders-grid">
                 <div class="founder-card reveal">
                     <div class="founder-avatar green">KI</div>
-                    <h3 class="founder-name">Kemal Inecik</h3>
-                    <p class="founder-role" data-i18n="team.kemal.role">CEO · Co-Founder</p>
-                    <p class="founder-desc" data-i18n="team.kemal.desc">Machine learning PhD at Helmholtz Munich &amp; TUM, building deep generative models in one of the world&#8217;s leading AI-for-science labs. Turns cutting-edge research into real-world products.</p>
+                    <h3 class="founder-name">Kemal &Idot;necik</h3>
+                    <p class="founder-role" data-i18n="team.kemal.role"></p>
+                    <p class="founder-desc" data-i18n="team.kemal.desc"></p>
                 </div>
                 <div class="founder-card reveal">
                     <div class="founder-avatar blue">&Ouml;A</div>
                     <h3 class="founder-name">&Ouml;zg&uuml;r Ak</h3>
-                    <p class="founder-role" data-i18n="team.ozgur.role">Co-Founder · Engineering</p>
-                    <p class="founder-desc" data-i18n="team.ozgur.desc">Mechanical engineer bridging hardware sensing, biomechanics, and scalable software. Designs the systems that turn raw motion data into production-grade intelligence.</p>
+                    <p class="founder-role" data-i18n="team.ozgur.role"></p>
+                    <p class="founder-desc" data-i18n="team.ozgur.desc"></p>
                 </div>
                 <div class="founder-card reveal">
                     <div class="founder-avatar violet">FT</div>
                     <h3 class="founder-name">Fabian J. Theis</h3>
-                    <p class="founder-role" data-i18n="team.fabian.role">Co-Founder · ML &amp; AI</p>
-                    <p class="founder-desc" data-i18n="team.fabian.desc">Professor at TUM and Director at Helmholtz Munich. Leibniz Prize laureate, ERC Advanced Grant holder, and one of Europe&#8217;s most cited scientists in machine learning for the life sciences.</p>
+                    <p class="founder-role" data-i18n="team.fabian.role"></p>
+                    <p class="founder-desc" data-i18n="team.fabian.desc"></p>
                 </div>
                 <div class="founder-card reveal">
                     <div class="founder-avatar amber">SC</div>
                     <h3 class="founder-name">&Scedil;eref &Ccedil;i&ccedil;ek</h3>
-                    <p class="founder-role" data-i18n="team.seref.role">Co-Founder · Football</p>
-                    <p class="founder-desc" data-i18n="team.seref.desc">UEFA A licensed coach with two decades at elite level. Led Be&scedil;ikta&scedil; to back-to-back S&uuml;per Lig championships and coached the Turkey National Team. The domain expert who keeps the AI honest.</p>
+                    <p class="founder-role" data-i18n="team.seref.role"></p>
+                    <p class="founder-desc" data-i18n="team.seref.desc"></p>
                 </div>
             </div>
         </div>
@@ -1090,9 +1337,9 @@
     <section class="solutions-section" id="solutions">
         <div class="container">
             <div class="solutions-header">
-                <div class="section-label reveal" data-i18n="solutions.label">Solutions</div>
-                <h2 class="section-title reveal" data-i18n="solutions.title">Built for every level of the game.</h2>
-                <p class="section-desc reveal" data-i18n="solutions.desc">Whether you&#8217;re optimizing personal performance or managing professional teams, our AI platform adapts to your needs.</p>
+                <div class="section-label reveal" data-i18n="solutions.label"></div>
+                <h2 class="section-title reveal" data-i18n="solutions.title"></h2>
+                <p class="section-desc reveal" data-i18n="solutions.desc"></p>
             </div>
             <div class="solutions-grid">
                 <div class="audience-card card-green reveal">
@@ -1107,14 +1354,14 @@
                             <path d="M18 7 C20 8, 21 10, 21 10" opacity="0.4"/>
                         </svg>
                     </div>
-                    <span class="audience-tag tag-green" data-i18n="solutions.individual.tag">Individual</span>
-                    <h3 class="audience-card-title" data-i18n="solutions.individual.title">Personal Performance</h3>
-                    <p class="audience-card-desc" data-i18n="solutions.individual.desc">Optimize your running biomechanics, prevent injuries, and unlock your athletic potential with AI-driven movement analysis.</p>
+                    <span class="audience-tag tag-green" data-i18n="solutions.individual.tag"></span>
+                    <h3 class="audience-card-title" data-i18n="solutions.individual.title"></h3>
+                    <p class="audience-card-desc" data-i18n="solutions.individual.desc"></p>
                     <ul class="audience-features">
-                        <li class="audience-feature"><span class="check green"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.individual.f1">Biomechanical step analysis</span></li>
-                        <li class="audience-feature"><span class="check green"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.individual.f2">Running health monitoring</span></li>
-                        <li class="audience-feature"><span class="check green"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.individual.f3">Performance potential mapping</span></li>
-                        <li class="audience-feature"><span class="check green"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.individual.f4">Personalized training insights</span></li>
+                        <li class="audience-feature"><span class="check green"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.individual.f1"></span></li>
+                        <li class="audience-feature"><span class="check green"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.individual.f2"></span></li>
+                        <li class="audience-feature"><span class="check green"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.individual.f3"></span></li>
+                        <li class="audience-feature"><span class="check green"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.individual.f4"></span></li>
                     </ul>
                 </div>
                 <div class="audience-card card-violet reveal">
@@ -1126,14 +1373,14 @@
                             <line x1="17" y1="8" x2="14" y2="8" opacity="0.5"/>
                         </svg>
                     </div>
-                    <span class="audience-tag tag-violet" data-i18n="solutions.pro.tag">Professional</span>
-                    <h3 class="audience-card-title" data-i18n="solutions.pro.title">Team Intelligence</h3>
-                    <p class="audience-card-desc" data-i18n="solutions.pro.desc">Comprehensive big data analytics for clubs and coaches across multiple sports. Tactical formations, player metrics, and match intelligence at scale.</p>
+                    <span class="audience-tag tag-violet" data-i18n="solutions.pro.tag"></span>
+                    <h3 class="audience-card-title" data-i18n="solutions.pro.title"></h3>
+                    <p class="audience-card-desc" data-i18n="solutions.pro.desc"></p>
                     <ul class="audience-features">
-                        <li class="audience-feature"><span class="check violet"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.pro.f1">Tactical formation analysis</span></li>
-                        <li class="audience-feature"><span class="check violet"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.pro.f2">Player performance dashboard</span></li>
-                        <li class="audience-feature"><span class="check violet"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.pro.f3">Team health &amp; readiness scoring</span></li>
-                        <li class="audience-feature"><span class="check violet"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.pro.f4">Big data match intelligence</span></li>
+                        <li class="audience-feature"><span class="check violet"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.pro.f1"></span></li>
+                        <li class="audience-feature"><span class="check violet"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.pro.f2"></span></li>
+                        <li class="audience-feature"><span class="check violet"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.pro.f3"></span></li>
+                        <li class="audience-feature"><span class="check violet"><svg viewBox="0 0 10 10"><path d="M2 5 L4 7 L8 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span data-i18n="solutions.pro.f4"></span></li>
                     </ul>
                 </div>
             </div>
@@ -1142,103 +1389,61 @@
 
     <div class="divider"></div>
 
-    <!-- ========== FEATURES HORIZONTAL SCROLL ========== -->
+    <!-- ========== FEATURES GRID ========== -->
     <section class="features-section" id="features">
         <div class="container">
             <div class="features-header">
-                <div class="section-label reveal" data-i18n="capabilities.label">Capabilities</div>
-                <h2 class="section-title reveal" data-i18n="capabilities.title">Powered by advanced AI.</h2>
-                <p class="section-desc reveal" data-i18n="capabilities.desc">Six core capabilities that transform raw match footage into actionable intelligence, from skeleton tracking to predictive analytics.</p>
+                <div class="section-label reveal" data-i18n="capabilities.label"></div>
+                <h2 class="section-title reveal" data-i18n="capabilities.title"></h2>
+                <p class="section-desc reveal" data-i18n="capabilities.desc"></p>
             </div>
-        </div>
-        <div class="features-h-wrap">
-            <div class="features-h-track">
-                <div class="feature-card reveal">
-                    <div class="feature-icon fi-green">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="4" r="2.5"/>
-                            <line x1="12" y1="6.5" x2="12" y2="15"/>
-                            <line x1="8" y1="10" x2="16" y2="10"/>
-                            <line x1="12" y1="15" x2="8" y2="21"/>
-                            <line x1="12" y1="15" x2="16" y2="21"/>
-                            <circle cx="8" cy="10" r="1" fill="currentColor" opacity="0.5"/>
-                            <circle cx="16" cy="10" r="1" fill="currentColor" opacity="0.5"/>
-                            <circle cx="12" cy="15" r="1" fill="currentColor" opacity="0.5"/>
-                        </svg>
-                    </div>
-                    <h3 class="feature-card-title" data-i18n="capabilities.pose.title">Pose Estimation</h3>
-                    <p class="feature-card-desc" data-i18n="capabilities.pose.desc">17-keypoint skeletal tracking for every player on the pitch at 25 fps, powered by our custom transformer architecture.</p>
+            <div class="cap-grid">
+                <div class="cap-card reveal">
+                    <div class="cap-card-label" data-i18n="capabilities.pose.label"></div>
+                    <h3 class="cap-card-title" data-i18n="capabilities.pose.title"></h3>
+                    <p class="cap-card-desc" data-i18n="capabilities.pose.desc"></p>
                 </div>
-                <div class="feature-card reveal">
-                    <div class="feature-icon fi-violet">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 20 C4 20, 6 14, 8 12 S12 8, 14 10 S18 16, 20 4"/>
-                            <circle cx="8" cy="12" r="2" opacity="0.4"/>
-                            <circle cx="14" cy="10" r="2" opacity="0.4"/>
-                            <circle cx="20" cy="4" r="2" opacity="0.4"/>
-                        </svg>
-                    </div>
-                    <h3 class="feature-card-title" data-i18n="capabilities.signatures.title">Movement Signatures</h3>
-                    <p class="feature-card-desc" data-i18n="capabilities.signatures.desc">Unique motion fingerprints that characterize off-ball behavior, enabling comparison across leagues and seasons.</p>
+                <div class="cap-card reveal">
+                    <div class="cap-card-label" data-i18n="capabilities.signatures.label"></div>
+                    <h3 class="cap-card-title" data-i18n="capabilities.signatures.title"></h3>
+                    <p class="cap-card-desc" data-i18n="capabilities.signatures.desc"></p>
                 </div>
-                <div class="feature-card reveal">
-                    <div class="feature-icon fi-blue">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="8" cy="8" r="3" opacity="0.5"/>
-                            <circle cx="16" cy="8" r="3" opacity="0.5"/>
-                            <circle cx="12" cy="16" r="3" opacity="0.5"/>
-                            <line x1="10.5" y1="9.5" x2="13.5" y2="14"/>
-                            <line x1="13.5" y1="9.5" x2="10.5" y2="14"/>
-                            <line x1="8" y1="8" x2="16" y2="8" opacity="0.3"/>
-                        </svg>
-                    </div>
-                    <h3 class="feature-card-title" data-i18n="capabilities.clustering.title">Tactical Clustering</h3>
-                    <p class="feature-card-desc" data-i18n="capabilities.clustering.desc">Automatically group and classify defensive structures, pressing patterns, and space-occupation strategies.</p>
+                <div class="cap-card reveal">
+                    <div class="cap-card-label" data-i18n="capabilities.profiling.label"></div>
+                    <h3 class="cap-card-title" data-i18n="capabilities.profiling.title"></h3>
+                    <p class="cap-card-desc" data-i18n="capabilities.profiling.desc"></p>
                 </div>
-                <div class="feature-card reveal">
-                    <div class="feature-icon fi-amber">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="2"/>
-                            <line x1="2" y1="12" x2="22" y2="12" opacity="0.3"/>
-                            <line x1="12" y1="2" x2="12" y2="22" opacity="0.3"/>
-                            <circle cx="7" cy="7" r="2" fill="currentColor" opacity="0.3"/>
-                            <circle cx="17" cy="9" r="1.5" fill="currentColor" opacity="0.3"/>
-                            <circle cx="10" cy="16" r="1.8" fill="currentColor" opacity="0.3"/>
-                        </svg>
-                    </div>
-                    <h3 class="feature-card-title" data-i18n="capabilities.spatial.title">Spatial Intelligence</h3>
-                    <p class="feature-card-desc" data-i18n="capabilities.spatial.desc">Heat maps, Voronoi diagrams, and pitch-control models that quantify space creation and defensive coverage.</p>
+                <div class="cap-card reveal">
+                    <div class="cap-card-label" data-i18n="capabilities.search.label"></div>
+                    <h3 class="cap-card-title" data-i18n="capabilities.search.title"></h3>
+                    <p class="cap-card-desc" data-i18n="capabilities.search.desc"></p>
                 </div>
-                <div class="feature-card reveal">
-                    <div class="feature-icon fi-red">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12 L12 5 L19 12"/>
-                            <path d="M12 5 V19"/>
-                            <path d="M8 16 C8 16, 10 20, 12 20 S16 16, 16 16" opacity="0.3"/>
-                            <circle cx="12" cy="5" r="2" fill="currentColor" opacity="0.3"/>
-                        </svg>
-                    </div>
-                    <h3 class="feature-card-title" data-i18n="capabilities.predictive.title">Predictive Runs</h3>
-                    <p class="feature-card-desc" data-i18n="capabilities.predictive.desc">Forecast the next 2-3 seconds of player trajectories to anticipate runs, overlaps, and pressing triggers.</p>
+                <div class="cap-card reveal">
+                    <div class="cap-card-label" data-i18n="capabilities.fingerprint.label"></div>
+                    <h3 class="cap-card-title" data-i18n="capabilities.fingerprint.title"></h3>
+                    <p class="cap-card-desc" data-i18n="capabilities.fingerprint.desc"></p>
                 </div>
-                <div class="feature-card reveal">
-                    <div class="feature-icon fi-white">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2 L12 6"/>
-                            <path d="M12 18 L12 22"/>
-                            <path d="M4.93 4.93 L7.76 7.76"/>
-                            <path d="M16.24 16.24 L19.07 19.07"/>
-                            <path d="M2 12 L6 12"/>
-                            <path d="M18 12 L22 12"/>
-                            <circle cx="12" cy="12" r="4"/>
-                            <path d="M12 8 A4 4 0 0 1 16 12" fill="currentColor" opacity="0.15"/>
-                        </svg>
-                    </div>
-                    <h3 class="feature-card-title" data-i18n="capabilities.readiness.title">Match Readiness</h3>
-                    <p class="feature-card-desc" data-i18n="capabilities.readiness.desc">Evaluate physical and tactical readiness scores based on movement intensity, positioning discipline, and fatigue markers.</p>
+                <div class="cap-card reveal">
+                    <div class="cap-card-label" data-i18n="capabilities.clustering.label"></div>
+                    <h3 class="cap-card-title" data-i18n="capabilities.clustering.title"></h3>
+                    <p class="cap-card-desc" data-i18n="capabilities.clustering.desc"></p>
+                </div>
+                <div class="cap-card reveal">
+                    <div class="cap-card-label" data-i18n="capabilities.predictive.label"></div>
+                    <h3 class="cap-card-title" data-i18n="capabilities.predictive.title"></h3>
+                    <p class="cap-card-desc" data-i18n="capabilities.predictive.desc"></p>
+                </div>
+                <div class="cap-card reveal">
+                    <div class="cap-card-label" data-i18n="capabilities.injury.label"></div>
+                    <h3 class="cap-card-title" data-i18n="capabilities.injury.title"></h3>
+                    <p class="cap-card-desc" data-i18n="capabilities.injury.desc"></p>
+                </div>
+                <div class="cap-card reveal">
+                    <div class="cap-card-label" data-i18n="capabilities.readiness.label"></div>
+                    <h3 class="cap-card-title" data-i18n="capabilities.readiness.title"></h3>
+                    <p class="cap-card-desc" data-i18n="capabilities.readiness.desc"></p>
                 </div>
             </div>
-            <div class="features-progress"></div>
         </div>
     </section>
 
@@ -1248,26 +1453,26 @@
     <section class="preview-section" id="preview">
         <div class="container">
             <div class="preview-header">
-                <div class="section-label reveal" data-i18n="preview.label">Live Preview</div>
-                <h2 class="section-title reveal" data-i18n="preview.title">See the invisible.</h2>
-                <p class="section-desc reveal" data-i18n="preview.desc">Real-time visualization of every player&#8217;s skeletal pose, movement vector, and spatial relationship &mdash; all rendered live from match data.</p>
+                <div class="section-label reveal" data-i18n="preview.label"></div>
+                <h2 class="section-title reveal" data-i18n="preview.title"></h2>
+                <p class="section-desc reveal" data-i18n="preview.desc"></p>
             </div>
             <div class="preview-window reveal">
                 <div class="preview-chrome">
                     <div class="preview-dots">
                         <span></span><span></span><span></span>
                     </div>
-                    <div class="preview-title">withoutball &mdash; match_analysis.live</div>
+                    <div class="preview-title" data-i18n="preview.window_title"></div>
                     <div class="preview-right">
-                        <div class="preview-modes" role="group" aria-label="Preview mode" data-i18n-attr="aria-label:preview.modes_aria">
-                            <button class="preview-mode-btn" type="button" data-mode="skeleton" aria-pressed="true" data-i18n="preview.mode_skeleton">Skeleton</button>
-                            <button class="preview-mode-btn" type="button" data-mode="space" aria-pressed="false" data-i18n="preview.mode_space">Space</button>
-                            <button class="preview-mode-btn" type="button" data-mode="predict" aria-pressed="false" data-i18n="preview.mode_predict">Predict</button>
+                        <div class="preview-modes" role="group" data-i18n-attr="aria-label:preview.modes_aria">
+                            <button class="preview-mode-btn" type="button" data-mode="skeleton" aria-pressed="true" data-i18n="preview.mode_skeleton"></button>
+                            <button class="preview-mode-btn" type="button" data-mode="space" aria-pressed="false" data-i18n="preview.mode_space"></button>
+                            <button class="preview-mode-btn" type="button" data-mode="predict" aria-pressed="false" data-i18n="preview.mode_predict"></button>
                         </div>
                         <div class="preview-stats">
-                            <span class="live">LIVE</span>
-                            <span data-i18n="preview.players">22 PLAYERS</span>
-                            <span data-i18n="preview.keypoints">374 KEYPOINTS</span>
+                            <span class="live" data-i18n="preview.live"></span>
+                            <span data-i18n="preview.players"></span>
+                            <span data-i18n="preview.keypoints"></span>
                         </div>
                     </div>
                 </div>
@@ -1282,26 +1487,26 @@
     <section class="how-section" id="how">
         <div class="container">
             <div class="how-header">
-                <div class="section-label reveal" data-i18n="how.label">Process</div>
-                <h2 class="section-title reveal" data-i18n="how.title">From raw data to tactical intelligence.</h2>
-                <p class="section-desc reveal" data-i18n="how.desc">Three simple steps to transform your match footage into actionable insights that give you the competitive edge.</p>
+                <div class="section-label reveal" data-i18n="how.label"></div>
+                <h2 class="section-title reveal" data-i18n="how.title"></h2>
+                <p class="section-desc reveal" data-i18n="how.desc"></p>
             </div>
             <div class="how-grid">
                 <div class="how-connector"></div>
                 <div class="how-step reveal">
                     <div class="how-num green">01</div>
-                    <h3 class="how-step-title" data-i18n="how.s1.title">Connect Your Data</h3>
-                    <p class="how-step-desc" data-i18n="how.s1.desc">Upload match footage, connect wearable sensors, or stream live feeds. Our platform ingests data from any source.</p>
+                    <h3 class="how-step-title" data-i18n="how.s1.title"></h3>
+                    <p class="how-step-desc" data-i18n="how.s1.desc"></p>
                 </div>
                 <div class="how-step reveal">
                     <div class="how-num blue">02</div>
-                    <h3 class="how-step-title" data-i18n="how.s2.title">AI Processes</h3>
-                    <p class="how-step-desc" data-i18n="how.s2.desc">Our vision models extract skeletal pose data while transformers encode movement into rich tactical representations.</p>
+                    <h3 class="how-step-title" data-i18n="how.s2.title"></h3>
+                    <p class="how-step-desc" data-i18n="how.s2.desc"></p>
                 </div>
                 <div class="how-step reveal">
                     <div class="how-num violet">03</div>
-                    <h3 class="how-step-title" data-i18n="how.s3.title">Get Insights</h3>
-                    <p class="how-step-desc" data-i18n="how.s3.desc">Access dashboards with movement signatures, tactical maps, health scores, and predictive analytics in real-time.</p>
+                    <h3 class="how-step-title" data-i18n="how.s3.title"></h3>
+                    <p class="how-step-desc" data-i18n="how.s3.desc"></p>
                 </div>
             </div>
         </div>
@@ -1313,49 +1518,49 @@
     <section class="tech-section" id="tech">
         <div class="container">
             <div class="tech-header">
-                <div class="section-label reveal" data-i18n="tech.label">Under the Hood</div>
-                <h2 class="section-title reveal" data-i18n="tech.title">Built on cutting-edge research.</h2>
-                <p class="section-desc reveal" data-i18n="tech.desc">Our platform leverages the latest advances in computer vision, self-supervised learning, and real-time systems engineering.</p>
+                <div class="section-label reveal" data-i18n="tech.label"></div>
+                <h2 class="section-title reveal" data-i18n="tech.title"></h2>
+                <p class="section-desc reveal" data-i18n="tech.desc"></p>
             </div>
             <div class="tech-grid">
                 <div class="tech-card reveal">
-                    <div class="tech-card-label" data-i18n="tech.c1.label">Architecture</div>
-                    <h3 class="tech-card-title" data-i18n="tech.c1.title">Pose Transformer</h3>
-                    <p class="tech-card-desc" data-i18n="tech.c1.desc">Custom spatiotemporal transformer that processes 17-keypoint skeletal sequences, learning rich representations of player body language and movement intent.</p>
+                    <div class="tech-card-label" data-i18n="tech.c1.label"></div>
+                    <h3 class="tech-card-title" data-i18n="tech.c1.title"></h3>
+                    <p class="tech-card-desc" data-i18n="tech.c1.desc"></p>
                     <div class="tech-tags">
-                        <span class="tech-tag">Transformer</span>
-                        <span class="tech-tag">Self-Attention</span>
-                        <span class="tech-tag">Positional Encoding</span>
+                        <span class="tech-tag" data-i18n="tech.tag.graph_attention"></span>
+                        <span class="tech-tag" data-i18n="tech.tag.causal_masking"></span>
+                        <span class="tech-tag" data-i18n="tech.tag.multi_scale"></span>
                     </div>
                 </div>
                 <div class="tech-card reveal">
-                    <div class="tech-card-label" data-i18n="tech.c2.label">Pre-training</div>
-                    <h3 class="tech-card-title" data-i18n="tech.c2.title">Masked Joint Modeling</h3>
-                    <p class="tech-card-desc" data-i18n="tech.c2.desc">Self-supervised pre-training on thousands of match sequences using masked joint prediction, learning to reconstruct missing pose information.</p>
+                    <div class="tech-card-label" data-i18n="tech.c2.label"></div>
+                    <h3 class="tech-card-title" data-i18n="tech.c2.title"></h3>
+                    <p class="tech-card-desc" data-i18n="tech.c2.desc"></p>
                     <div class="tech-tags">
-                        <span class="tech-tag">MJM</span>
-                        <span class="tech-tag">SSL</span>
-                        <span class="tech-tag">Reconstruction</span>
+                        <span class="tech-tag" data-i18n="tech.tag.foundation_model"></span>
+                        <span class="tech-tag" data-i18n="tech.tag.transfer_learning"></span>
+                        <span class="tech-tag" data-i18n="tech.tag.scale"></span>
                     </div>
                 </div>
                 <div class="tech-card reveal">
-                    <div class="tech-card-label" data-i18n="tech.c3.label">Representation</div>
-                    <h3 class="tech-card-title" data-i18n="tech.c3.title">Contrastive Learning</h3>
-                    <p class="tech-card-desc" data-i18n="tech.c3.desc">VICReg and Barlow Twins objectives create invariant representations that capture tactical similarity regardless of camera angle or player identity.</p>
+                    <div class="tech-card-label" data-i18n="tech.c3.label"></div>
+                    <h3 class="tech-card-title" data-i18n="tech.c3.title"></h3>
+                    <p class="tech-card-desc" data-i18n="tech.c3.desc"></p>
                     <div class="tech-tags">
-                        <span class="tech-tag">VICReg</span>
-                        <span class="tech-tag">Barlow Twins</span>
-                        <span class="tech-tag">Embeddings</span>
+                        <span class="tech-tag" data-i18n="tech.tag.diffusion"></span>
+                        <span class="tech-tag" data-i18n="tech.tag.counterfactual"></span>
+                        <span class="tech-tag" data-i18n="tech.tag.generation"></span>
                     </div>
                 </div>
                 <div class="tech-card reveal">
-                    <div class="tech-card-label" data-i18n="tech.c4.label">Deployment</div>
-                    <h3 class="tech-card-title" data-i18n="tech.c4.title">Real-Time Pipeline</h3>
-                    <p class="tech-card-desc" data-i18n="tech.c4.desc">End-to-end inference pipeline optimized for live match analysis with sub-40ms latency per frame, from video input to tactical output.</p>
+                    <div class="tech-card-label" data-i18n="tech.c4.label"></div>
+                    <h3 class="tech-card-title" data-i18n="tech.c4.title"></h3>
+                    <p class="tech-card-desc" data-i18n="tech.c4.desc"></p>
                     <div class="tech-tags">
-                        <span class="tech-tag">ONNX</span>
-                        <span class="tech-tag">GPU Inference</span>
-                        <span class="tech-tag">Streaming</span>
+                        <span class="tech-tag" data-i18n="tech.tag.model_distillation"></span>
+                        <span class="tech-tag" data-i18n="tech.tag.edge_compute"></span>
+                        <span class="tech-tag" data-i18n="tech.tag.async_pipeline"></span>
                     </div>
                 </div>
             </div>
@@ -1366,14 +1571,15 @@
     <section class="cta-section" id="cta">
         <div class="container">
             <div class="cta-box reveal">
-                <div class="section-label cta-label" data-i18n="cta.label">Early Access</div>
-                <h2 class="cta-title" data-i18n="cta.title">Ready to see what you&#8217;ve been missing?</h2>
-                <p class="cta-desc" data-i18n="cta.desc">Join the waitlist for early access. Be among the first to unlock football&#8217;s hidden intelligence layer.</p>
-                <form class="cta-form" id="ctaForm">
-                    <input type="email" class="cta-input" placeholder="your@email.com" required aria-label="Email address" data-i18n-attr="placeholder:cta.placeholder;aria-label:cta.email_aria">
-                    <button type="submit" class="cta-submit magnetic" data-i18n="cta.submit">Join Waitlist</button>
+                <div class="section-label cta-label" data-i18n="cta.label"></div>
+                <h2 class="cta-title" data-i18n="cta.title"></h2>
+                <p class="cta-desc" data-i18n="cta.desc"></p>
+                <form class="cta-form" id="ctaForm" autocomplete="off">
+                    <input type="email" class="cta-input" required data-i18n-attr="placeholder:cta.placeholder;aria-label:cta.email_aria">
+                    <input type="text" name="website" class="cta-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+                    <button type="submit" class="cta-submit magnetic" data-i18n="cta.submit"></button>
                 </form>
-                <div class="cta-success" id="ctaSuccess" data-i18n="cta.success">Added! We&#8217;ll be in touch soon.</div>
+                <div class="cta-msg" id="ctaMsg"></div>
             </div>
         </div>
     </section>
@@ -1381,45 +1587,37 @@
     <!-- ========== FOOTER ========== -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-left">&copy; 2026 withoutball.com &middot; <span data-i18n="footer.built_by">Built by</span> <a href="https://kemalinecik.com" target="_blank" rel="noopener">Kemal Inecik</a></div>
+            <div class="footer-left">&copy; 2026 WithoutBall &middot; <span data-i18n="footer.built_by"></span> <a href="https://kemalinecik.com" target="_blank" rel="noopener">Kemal &Idot;necik</a></div>
             <div class="footer-right">
-                <a href="mailto:info@withoutball.com" data-i18n="footer.contact">Contact</a>
+                <a href="mailto:info@withoutball.com" data-i18n="footer.contact"></a>
+                <a href="https://www.linkedin.com/company/withoutball/" target="_blank" rel="noopener noreferrer" data-i18n="footer.linkedin"></a>
+                <a href="https://www.instagram.com/withoutballhq/" target="_blank" rel="noopener noreferrer" data-i18n="footer.instagram"></a>
+                <a href="https://twitter.com/withoutballhq" target="_blank" rel="noopener noreferrer" data-i18n="footer.twitter"></a>
+                <a href="https://github.com/withoutball" target="_blank" rel="noopener noreferrer" data-i18n="footer.github"></a>
             </div>
         </div>
     </footer>
 
-    <!-- ========== SCRIPTS ========== -->
-    <!-- GSAP -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+	    <!-- ========== SCRIPTS ========== -->
+	    <!-- GSAP -->
+	    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+	    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
-    <script>
-    (function() {
-        'use strict';
+	    <script>
+	    (function() {
+	        'use strict';
 
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const gsap = window.gsap;
-        const ScrollTrigger = window.ScrollTrigger;
-        const canAnimate = !!(gsap && ScrollTrigger && !reduceMotion);
+	        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        if (gsap && ScrollTrigger) {
-            try { gsap.registerPlugin(ScrollTrigger); } catch (e) {}
-            ScrollTrigger.config({ ignoreMobileResize: true });
+	        const root = document.documentElement;
+	        const themeMeta = document.querySelector('meta[name="theme-color"]');
+
+        function storageGet(storage, key) {
+            try { return storage.getItem(key); } catch (e) { return null; }
         }
-
-        // Smoothly adapt to resizes (especially when resizing the window manually).
-        if (ScrollTrigger && !reduceMotion) {
-            let stRefreshTimer = null;
-            window.addEventListener('resize', () => {
-                clearTimeout(stRefreshTimer);
-                stRefreshTimer = setTimeout(() => {
-                    try { ScrollTrigger.refresh(); } catch (e) {}
-                }, 180);
-            }, { passive: true });
+        function storageSet(storage, key, value) {
+            try { storage.setItem(key, value); } catch (e) {}
         }
-
-        const root = document.documentElement;
-        const themeMeta = document.querySelector('meta[name="theme-color"]');
 
         function readCssVar(name) {
             return getComputedStyle(root).getPropertyValue(name).trim();
@@ -1434,11 +1632,10 @@
         /* ========== I18N (Language) ========== */
         const I18N = {
             en: {
-                'meta.title': 'withoutball — AI-Powered Football Intelligence',
+                'meta.title': 'WithoutBall — AI-Powered Football Intelligence',
                 'meta.description': 'From personal biomechanics to professional match analytics. One AI-powered platform that transforms raw movement data into winning insights.',
 
-                'nav.home': 'withoutball home',
-                'nav.menu': 'Toggle menu',
+                'nav.home': 'WithoutBall home',
                 'nav.language': 'Language',
                 'nav.solutions': 'Solutions',
                 'nav.capabilities': 'Capabilities',
@@ -1447,8 +1644,10 @@
                 'nav.tech': 'Technology',
                 'nav.team': 'Team',
                 'nav.cta': 'Get Early Access',
+                'nav.menu_open': 'Open navigation menu',
+                'nav.menu_close': 'Close navigation menu',
 
-                'hero.badge': 'Next-Gen Football Intelligence · In Development',
+                'hero.badge': 'Next-Gen Football Intelligence · Launching Soon',
                 'hero.title_1': 'The intelligence layer',
                 'hero.title_2': 'for modern football.',
                 'hero.subtitle': 'From personal biomechanics to professional match analytics — a next-generation AI + big data platform that turns raw movement into winning insights.',
@@ -1489,7 +1688,7 @@
 
                 'solutions.label': 'Solutions',
                 'solutions.title': 'Built for every level of the game.',
-                'solutions.desc': 'Whether you’re optimizing personal performance or managing professional teams, our AI platform adapts to your needs.',
+                'solutions.desc': 'Whether you are optimizing personal performance or managing professional teams, our AI platform adapts to your needs.',
                 'solutions.individual.tag': 'Individual',
                 'solutions.individual.title': 'Personal Performance',
                 'solutions.individual.desc': 'Optimize your running biomechanics, prevent injuries, and unlock your athletic potential with AI-driven movement analysis.',
@@ -1505,27 +1704,44 @@
                 'solutions.pro.f3': 'Team health & readiness scoring',
                 'solutions.pro.f4': 'Big data match intelligence',
 
-                'capabilities.label': 'Capabilities',
-                'capabilities.title': 'Powered by advanced AI.',
-                'capabilities.desc': 'Six core capabilities that transform raw match footage into actionable intelligence, from skeleton tracking to predictive analytics.',
-                'capabilities.pose.title': 'Pose Estimation',
-                'capabilities.pose.desc': '17-keypoint skeletal tracking for every player on the pitch at 25 fps, powered by our custom transformer architecture.',
-                'capabilities.signatures.title': 'Movement Signatures',
-                'capabilities.signatures.desc': 'Unique motion fingerprints that characterize off-ball behavior, enabling comparison across leagues and seasons.',
-                'capabilities.clustering.title': 'Tactical Clustering',
-                'capabilities.clustering.desc': 'Automatically group and classify defensive structures, pressing patterns, and space-occupation strategies.',
-                'capabilities.spatial.title': 'Spatial Intelligence',
-                'capabilities.spatial.desc': 'Heat maps, Voronoi diagrams, and pitch-control models that quantify space creation and defensive coverage.',
-                'capabilities.predictive.title': 'Predictive Runs',
-                'capabilities.predictive.desc': 'Forecast the next 2–3 seconds of player trajectories to anticipate runs, overlaps, and pressing triggers.',
-                'capabilities.readiness.title': 'Match Readiness',
-                'capabilities.readiness.desc': 'Evaluate physical and tactical readiness scores based on movement intensity, positioning discipline, and fatigue markers.',
+	                'capabilities.label': 'Capabilities',
+	                'capabilities.title': 'Powered by advanced AI.',
+	                'capabilities.desc': 'Here is what becomes possible with your data — from match-scale pose tracking to season-scale search, injury risk signals, and next-generation scouting.',
+	                'capabilities.pose.label': 'Computer Vision',
+	                'capabilities.pose.title': 'Pose Estimation',
+	                'capabilities.pose.desc': 'Broadcast-ready multi-player pose inference at 25 fps — 17 keypoints per player, stabilized for real match footage and built to feed every downstream model.',
+	                'capabilities.signatures.label': 'Deep Learning',
+	                'capabilities.signatures.title': 'Movement Signatures',
+	                'capabilities.signatures.desc': 'Learn compact movement embeddings for off-ball behavior — compare roles, styles, and tendencies across leagues and seasons.',
+	                'capabilities.profiling.label': 'Embedding Space',
+	                'capabilities.profiling.title': 'Scalable Player Profiling',
+	                'capabilities.profiling.desc': 'Embed every player\u2019s movement signature into a common space. Scouting becomes similarity search: \u201cfind me players who move like this one.\u201d',
+	                'capabilities.search.label': 'Retrieval Engine',
+	                'capabilities.search.title': 'Movement Search at Scale',
+	                'capabilities.search.desc': 'Query "every time a centre-back got beaten 1v1" and retrieve results across entire seasons — zero manual tagging, just raw data.',
+	                'capabilities.fingerprint.label': 'Pattern Recognition',
+	                'capabilities.fingerprint.title': 'Tactical Fingerprinting',
+	                'capabilities.fingerprint.desc': 'Automatically characterize playing styles, formations, and transitions without a single human annotation — compare opponents like a database query.',
+	                'capabilities.clustering.label': 'Unsupervised ML',
+	                'capabilities.clustering.title': 'Tactical Clustering',
+	                'capabilities.clustering.desc': 'Unsupervised discovery of defensive blocks, pressing schemes, and transitions — cluster patterns without a single hand-labeled event.',
+	                'capabilities.predictive.label': 'Forecasting',
+	                'capabilities.predictive.title': 'Predictive Runs',
+	                'capabilities.predictive.desc': 'Short-horizon probabilistic forecasts (2–3s) that surface runs, overlaps, and pressing triggers before they happen.',
+	                'capabilities.injury.label': 'Biomechanics',
+	                'capabilities.injury.title': 'Injury Risk Signals',
+	                'capabilities.injury.desc': 'Detect subtle biomechanical drift weeks before clinical symptoms appear — personalize thresholds per player, role, and load.',
+	                'capabilities.readiness.label': 'Performance Science',
+	                'capabilities.readiness.title': 'Match Readiness',
+	                'capabilities.readiness.desc': 'Combine intensity, coordination, and recovery markers into a readiness index for training and match decisions.',
 
                 'preview.label': 'Live Preview',
                 'preview.title': 'See the invisible.',
                 'preview.desc': 'Real-time visualization of every player’s skeletal pose, movement vector, and spatial relationship — all rendered live from match data.',
+                'preview.live': 'LIVE',
                 'preview.players': '22 PLAYERS',
                 'preview.keypoints': '374 KEYPOINTS',
+                'preview.window_title': 'WithoutBall — match_analysis.live',
                 'preview.modes_aria': 'Preview mode',
                 'preview.mode_skeleton': 'Skeleton',
                 'preview.mode_space': 'Space',
@@ -1545,37 +1761,56 @@
                 'tech.title': 'Built on cutting-edge research.',
                 'tech.desc': 'Our platform leverages the latest advances in computer vision, self-supervised learning, and real-time systems engineering.',
                 'tech.c1.label': 'Architecture',
-                'tech.c1.title': 'Pose Transformer',
-                'tech.c1.desc': 'Custom spatiotemporal transformer that processes 17-keypoint skeletal sequences, learning rich representations of player body language and movement intent.',
-                'tech.c2.label': 'Pre-training',
-                'tech.c2.title': 'Masked Joint Modeling',
-                'tech.c2.desc': 'Self-supervised pre-training on thousands of match sequences using masked joint prediction, learning to reconstruct missing pose information.',
-                'tech.c3.label': 'Representation',
-                'tech.c3.title': 'Contrastive Learning',
-                'tech.c3.desc': 'VICReg and Barlow Twins objectives create invariant representations that capture tactical similarity regardless of camera angle or player identity.',
-                'tech.c4.label': 'Deployment',
-                'tech.c4.title': 'Real-Time Pipeline',
-                'tech.c4.desc': 'End-to-end inference pipeline optimized for live match analysis with sub-40ms latency per frame, from video input to tactical output.',
+                'tech.c1.title': 'Hierarchical Motion Transformer',
+                'tech.c1.desc': 'Multi-scale transformer with joint-level graph attention and causal temporal layers. Spatial self-attention resolves inter-joint dependencies across the full skeletal topology, while hierarchical temporal modeling captures movement at multiple granularities — from sub-second micro-actions to full-possession tactical arcs.',
+                'tech.c2.label': 'Foundation',
+                'tech.c2.title': 'Football Foundation Model',
+                'tech.c2.desc': 'Pre-trained on millions of movement sequences across leagues, levels, and playing styles. A single large-scale model that transfers to any downstream task — from injury risk to tactical classification — with minimal fine-tuning.',
+                'tech.c3.label': 'Simulation',
+                'tech.c3.title': 'Neural Match Simulation',
+                'tech.c3.desc': 'Generative rollouts of full tactical scenarios. The diffusion-based simulator models the joint distribution of all on-pitch agents, enabling counterfactual analysis and what-if reasoning at the play level.',
+                'tech.c4.label': 'Infrastructure',
+                'tech.c4.title': 'Edge-Optimized Inference',
+                'tech.c4.desc': 'Quantized model distillation and hardware-aware graph compilation for deployment at the edge. Asynchronous pipeline with batched pose estimation, streaming transformer inference, and lock-free result aggregation — sub-frame latency from raw video to tactical output.',
+                'tech.tag.graph_attention': 'Graph Attention',
+                'tech.tag.causal_masking': 'Causal Masking',
+                'tech.tag.multi_scale': 'Multi-Scale',
+                'tech.tag.foundation_model': 'Foundation Model',
+                'tech.tag.transfer_learning': 'Transfer Learning',
+                'tech.tag.scale': 'Scale',
+                'tech.tag.diffusion': 'Diffusion',
+                'tech.tag.counterfactual': 'Counterfactual',
+                'tech.tag.generation': 'Generation',
+                'tech.tag.model_distillation': 'Model Distillation',
+                'tech.tag.edge_compute': 'Edge Compute',
+                'tech.tag.async_pipeline': 'Async Pipeline',
 
                 'cta.label': 'Early Access',
-                'cta.title': 'Ready to see what you’ve been missing?',
+                'cta.title': 'Ready to see what you have been missing?',
                 'cta.desc': 'Join the waitlist for early access. Be among the first to unlock football’s hidden intelligence layer.',
                 'cta.placeholder': 'your@email.com',
                 'cta.email_aria': 'Email address',
                 'cta.submit': 'Join Waitlist',
-                'cta.success': 'Added! We’ll be in touch soon.',
+                'cta.success': 'You are on the list. We will be in touch soon.',
+                'cta.error': 'Could not process your request \u2014 please try again shortly.',
+                'cta.throttle': 'We have received your interest. Please wait a moment before resubmitting.',
+                'cta.typo': 'Did you mean {email}? Submit again to confirm.',
+                'cta.duplicate': 'You are already on the list \u2014 we will reach out soon.',
 
                 'footer.built_by': 'Built by',
                 'footer.features': 'Features',
                 'footer.tech': 'Technology',
-                'footer.contact': 'Contact'
+                'footer.contact': 'Contact',
+                'footer.linkedin': 'LinkedIn',
+                'footer.instagram': 'Instagram',
+                'footer.twitter': 'Twitter',
+                'footer.github': 'GitHub'
             },
             de: {
-                'meta.title': 'withoutball — KI-gestützte Fußball-Intelligenz',
-                'meta.description': 'Von persönlicher Biomechanik bis zur professionellen Spielanalyse. Eine KI-Plattform, die Rohdaten in Sieger-Insights verwandelt.',
+                'meta.title': 'WithoutBall — KI-gestützte Fußball-Intelligenz',
+                'meta.description': 'Von persönlicher Biomechanik bis zur professionellen Spielanalyse. Eine KI-Plattform, die Rohbewegungsdaten in spielentscheidende Erkenntnisse verwandelt.',
 
-                'nav.home': 'withoutball Startseite',
-                'nav.menu': 'Menü umschalten',
+                'nav.home': 'WithoutBall Startseite',
                 'nav.language': 'Sprache',
                 'nav.solutions': 'Lösungen',
                 'nav.capabilities': 'Funktionen',
@@ -1583,86 +1818,105 @@
                 'nav.how': 'So funktioniert’s',
                 'nav.tech': 'Technologie',
                 'nav.team': 'Team',
-                'nav.cta': 'Early Access',
+                'nav.cta': 'Frühzugang sichern',
+                'nav.menu_open': 'Navigationsmenü öffnen',
+                'nav.menu_close': 'Navigationsmenü schließen',
 
-                'hero.badge': 'Next-Gen Fußball-Intelligenz · In Entwicklung',
+                'hero.badge': 'Fußball-Intelligenz der nächsten Generation · Startet bald',
                 'hero.title_1': 'Die Intelligenzschicht',
                 'hero.title_2': 'für modernen Fußball.',
-                'hero.subtitle': 'Von persönlicher Biomechanik bis zur professionellen Spielanalyse — eine Next-Gen KI- & Big-Data-Plattform, die Rohbewegung in spielentscheidende Insights verwandelt.',
-                'hero.chip_1': 'Big Data im Maßstab',
-                'hero.chip_2': 'Next-Gen KI',
-                'hero.chip_3': 'Off-Ball Intelligenz',
+                'hero.subtitle': 'Von persönlicher Biomechanik bis zur professionellen Spielanalyse — eine KI- & Big-Data-Plattform der nächsten Generation, die Rohbewegungsdaten in spielentscheidende Erkenntnisse verwandelt.',
+                'hero.chip_1': 'Big Data im großen Maßstab',
+                'hero.chip_2': 'KI der nächsten Generation',
+                'hero.chip_3': 'Ohne‑Ball‑Intelligenz',
                 'hero.chip_4': 'Echtzeit-Dashboards',
-                'hero.primary': 'Early Access anfragen',
+                'hero.primary': 'Frühzugang anfragen',
                 'hero.secondary': 'Plattform entdecken',
                 'hero.scroll': 'Scrollen',
 
                 'marquee.data_points': 'Datenpunkte pro Spiel',
                 'marquee.realtime': 'Echtzeit',
-                'marquee.tracking': 'Tracking',
+                'marquee.tracking': 'Erfassung',
                 'marquee.accuracy': 'Prognosegenauigkeit',
-                'marquee.keypoints': 'Skelett-Keypoints',
+                'marquee.keypoints': 'Skelettpunkte',
                 'marquee.pose': 'Posen-Schätzung',
                 'marquee.bigdata': 'Big-Data-Analyse',
-                'marquee.insights': 'KI-Insights',
+                'marquee.insights': 'KI-Erkenntnisse',
                 'marquee.tactical': 'Taktische Intelligenz',
 
                 'stats.data_points': 'Datenpunkte pro Spiel',
-                'stats.keypoints': 'Getrackte Skelett-Keypoints',
+                'stats.keypoints': 'Getrackte Skelettpunkte',
                 'stats.inference': 'Pose-Inferenz in Echtzeit',
                 'stats.accuracy': 'Prognosegenauigkeit',
 
-                'team.label': 'Team',
+                'team.label': 'Unser Team',
                 'team.title': 'Gebaut von Menschen, die das Spiel verstehen.',
-                'team.desc': 'ML-Forschende, Engineers und Fußballprofis — vereint durch eine Vision für die Zukunft des Sports.',
+                'team.desc': 'KI‑Forschende, Ingenieur:innen und Fußballprofis — vereint durch eine Vision für die Zukunft des Sports.',
                 'team.kemal.role': 'CEO · Mitgründer',
-                'team.kemal.desc': 'Promovierter ML-Researcher (Helmholtz Munich & TUM) und Entwickler tiefer generativer Modelle in einem der führenden AI-for-Science-Labs. Bringt Forschung in die Praxis.',
+                'team.kemal.desc': 'Promovierter ML‑Forscher (Helmholtz Munich & TUM) und Entwickler tiefer generativer Modelle in einem der führenden KI‑für‑die‑Wissenschaft‑Labore. Verwandelt Spitzenforschung in reale Produkte.',
                 'team.ozgur.role': 'Mitgründer · Engineering',
                 'team.ozgur.desc': 'Maschinenbauingenieur an der Schnittstelle aus Sensorik, Biomechanik und skalierbarer Software. Baut Systeme, die Bewegungsdaten in produktionsreife Intelligenz verwandeln.',
                 'team.fabian.role': 'Mitgründer · ML & KI',
-                'team.fabian.desc': 'Professor an der TUM und Direktor bei Helmholtz Munich. Leibniz-Preisträger, ERC Advanced Grant Holder und einer der meistzitierten Wissenschaftler Europas im Bereich Machine Learning.',
+                'team.fabian.desc': 'Professor an der TUM und Direktor bei Helmholtz Munich. Leibniz-Preisträger, ERC‑Advanced‑Grant‑Inhaber und einer der meistzitierten Wissenschaftler Europas im Bereich Maschinelles Lernen für die Lebenswissenschaften.',
                 'team.seref.role': 'Mitgründer · Fußball',
                 'team.seref.desc': 'UEFA-A-lizenzierter Trainer mit zwei Jahrzehnten auf Elite-Niveau. Führte Beşiktaş zu zwei Süper-Lig-Titeln in Folge und trainierte die türkische Nationalmannschaft. Hält die KI am Boden der Realität.',
 
                 'solutions.label': 'Lösungen',
                 'solutions.title': 'Für jedes Level des Spiels gebaut.',
-                'solutions.desc': 'Ob persönliche Leistungsoptimierung oder Profiteam-Management: Unsere KI passt sich deinem Bedarf an.',
+                'solutions.desc': 'Ob persönliche Leistungsoptimierung oder Profiteam-Management: Unsere KI passt sich Ihrem Bedarf an.',
                 'solutions.individual.tag': 'Einzelperson',
                 'solutions.individual.title': 'Persönliche Leistung',
-                'solutions.individual.desc': 'Optimiere Lauf-Biomechanik, reduziere Verletzungsrisiken und hebe dein Potenzial mit KI-gestützter Bewegungsanalyse.',
+                'solutions.individual.desc': 'Optimieren Sie Ihre Lauf-Biomechanik, reduzieren Sie Verletzungsrisiken und entfalten Sie Ihr Potenzial mit KI-gestützter Bewegungsanalyse.',
                 'solutions.individual.f1': 'Biomechanische Schrittanalyse',
                 'solutions.individual.f2': 'Monitoring der Laufgesundheit',
                 'solutions.individual.f3': 'Potenzial- & Leistungsprofil',
-                'solutions.individual.f4': 'Personalisierte Trainings-Insights',
+                'solutions.individual.f4': 'Personalisierte Trainings-Erkenntnisse',
                 'solutions.pro.tag': 'Professionell',
                 'solutions.pro.title': 'Team-Intelligenz',
-                'solutions.pro.desc': 'Next-Gen Big-Data-Analyse für Clubs und Coaches. Formationen, Off-Ball-Metriken und Match-Intelligence — skalierbar und in Echtzeit.',
+                'solutions.pro.desc': 'Big-Data-Analytik der nächsten Generation für Klubs und Trainer. Taktische Formationen, Ohne-Ball-Metriken und skalierbare Spielintelligenz.',
                 'solutions.pro.f1': 'Analyse taktischer Formationen',
-                'solutions.pro.f2': 'Dashboard für Spielerleistung',
-                'solutions.pro.f3': 'Team-Health & Readiness Scoring',
-                'solutions.pro.f4': 'Big-Data Match-Intelligence',
+                'solutions.pro.f2': 'Spieler-Performance-Dashboard',
+                'solutions.pro.f3': 'Teamgesundheit & Spielbereitschaft',
+                'solutions.pro.f4': 'Big-Data-Spielintelligenz',
 
-                'capabilities.label': 'Funktionen',
-                'capabilities.title': 'Angetrieben von moderner KI.',
-                'capabilities.desc': 'Sechs Kernfähigkeiten, die Match-Footage in umsetzbare Intelligenz verwandeln — von Skelett-Tracking bis Predictive Analytics.',
-                'capabilities.pose.title': 'Posen-Schätzung',
-                'capabilities.pose.desc': '17-Keypoint-Skeletttracking für jeden Spieler bei 25 fps — angetrieben von unserer Transformer-Architektur.',
-                'capabilities.signatures.title': 'Bewegungs-Signaturen',
-                'capabilities.signatures.desc': 'Einzigartige Bewegungs-Fingerprints für Off-Ball-Verhalten — vergleichbar über Ligen und Saisons hinweg.',
-                'capabilities.clustering.title': 'Taktisches Clustering',
-                'capabilities.clustering.desc': 'Automatisches Gruppieren und Klassifizieren von Defensivstrukturen, Pressingmustern und Raumstrategien.',
-                'capabilities.spatial.title': 'Raum-Intelligenz',
-                'capabilities.spatial.desc': 'Heatmaps, Voronoi-Diagramme und Pitch-Control-Modelle, die Raumgewinn und Defensiv-Coverage quantifizieren.',
-                'capabilities.predictive.title': 'Prädiktive Läufe',
-                'capabilities.predictive.desc': 'Prognostiziere 2–3 Sekunden Spielertrajektorien, um Läufe, Overlaps und Pressing-Trigger früh zu erkennen.',
-                'capabilities.readiness.title': 'Match-Readiness',
-                'capabilities.readiness.desc': 'Bewerte physische und taktische Readiness anhand von Intensität, Positionsdisziplin und Ermüdungsmarkern.',
+	                'capabilities.label': 'Funktionen',
+	                'capabilities.title': 'Angetrieben von modernster KI.',
+	                'capabilities.desc': 'Was mit Ihren Daten möglich wird — vom Pose-Tracking im Match bis zur Saisonsuche, Verletzungsrisiko-Signalen und Scouting der nächsten Generation.',
+	                'capabilities.pose.label': 'Computer Vision',
+	                'capabilities.pose.title': 'Posen-Schätzung',
+	                'capabilities.pose.desc': 'Broadcast-taugliche Mehrspieler-Pose-Inferenz mit 25 fps — 17 Skelettpunkte pro Spieler, stabilisiert für echtes Spielmaterial und als Basis für alle Modelle.',
+	                'capabilities.signatures.label': 'Deep Learning',
+	                'capabilities.signatures.title': 'Bewegungs-Signaturen',
+	                'capabilities.signatures.desc': 'Kompakte Bewegungs-Einbettungen für Ohne‑Ball‑Verhalten — Rollen, Stile und Tendenzen über Ligen und Saisons vergleichen.',
+	                'capabilities.profiling.label': 'Embedding-Raum',
+	                'capabilities.profiling.title': 'Skalierbares Spielerprofil',
+	                'capabilities.profiling.desc': 'Betten Sie die Bewegungs-Signatur jedes Spielers in einen gemeinsamen Raum ein. Scouting wird zur Ähnlichkeitssuche: „Finden Sie Spieler, die sich so bewegen wie dieser."',
+	                'capabilities.search.label': 'Retrieval Engine',
+	                'capabilities.search.title': 'Bewegungssuche im Maßstab',
+	                'capabilities.search.desc': 'Fragen Sie „jedes Mal, wenn ein Innenverteidiger im 1‑gegen‑1 geschlagen wurde" ab und erhalten Sie Treffer über ganze Saisons hinweg — ohne manuelles Tagging, nur Rohdaten.',
+	                'capabilities.fingerprint.label': 'Mustererkennung',
+	                'capabilities.fingerprint.title': 'Taktische Fingerabdrücke',
+	                'capabilities.fingerprint.desc': 'Spielstile, Formationen und Übergänge automatisch charakterisieren — ohne eine einzige menschliche Annotation. Gegner vergleichen wie mit einer Datenbankabfrage.',
+	                'capabilities.clustering.label': 'Unüberwachtes ML',
+	                'capabilities.clustering.title': 'Taktische Clusterung',
+	                'capabilities.clustering.desc': 'Unüberwachte Entdeckung von Defensivblöcken, Pressing-Schemata und Übergängen — Muster ohne handgelabelte Events gruppieren.',
+	                'capabilities.predictive.label': 'Prognose',
+	                'capabilities.predictive.title': 'Prädiktive Läufe',
+	                'capabilities.predictive.desc': 'Kurzfristige probabilistische Prognosen (2–3 s), die Läufe, Hinterläufe und Pressing-Auslöser sichtbar machen, bevor sie passieren.',
+	                'capabilities.injury.label': 'Biomechanik',
+	                'capabilities.injury.title': 'Verletzungsrisiko-Signale',
+	                'capabilities.injury.desc': 'Subtile biomechanische Drift Wochen vor klinischen Symptomen erkennen — Schwellenwerte pro Spieler, Rolle und Belastung personalisieren.',
+	                'capabilities.readiness.label': 'Leistungswissenschaft',
+	                'capabilities.readiness.title': 'Spielbereitschaft',
+	                'capabilities.readiness.desc': 'Intensität, Koordination und Erholung zu einem Bereitschaftsindex bündeln — für Trainingssteuerung und Aufstellungsentscheidungen.',
 
                 'preview.label': 'Live-Vorschau',
-                'preview.title': 'Sieh das Unsichtbare.',
-                'preview.desc': 'Live-Visualisierung von Pose, Bewegungsvektor und räumlichen Beziehungen — gerendert aus Match-Daten in Echtzeit.',
+                'preview.title': 'Sehen Sie das Unsichtbare.',
+                'preview.desc': 'Echtzeit-Visualisierung von Skelett-Pose, Bewegungsvektor und räumlichen Beziehungen jedes Spielers — live gerendert aus Match-Daten.',
+                'preview.live': 'LIVE',
                 'preview.players': '22 SPIELER',
-                'preview.keypoints': '374 KEYPOINTS',
+                'preview.keypoints': '374 SKELETTPUNKTE',
+                'preview.window_title': 'WithoutBall — spielanalyse.live',
                 'preview.modes_aria': 'Vorschau-Modus',
                 'preview.mode_skeleton': 'Skelett',
                 'preview.mode_space': 'Raum',
@@ -1670,49 +1924,68 @@
 
                 'how.label': 'Prozess',
                 'how.title': 'Von Rohdaten zu taktischer Intelligenz.',
-                'how.desc': 'Drei Schritte, um Match-Footage in Insights zu verwandeln, die dir den entscheidenden Vorteil geben.',
+                'how.desc': 'Drei einfache Schritte, um Ihre Spielaufnahmen in umsetzbare Erkenntnisse zu verwandeln, die Ihnen den entscheidenden Vorteil verschaffen.',
                 'how.s1.title': 'Daten verbinden',
-                'how.s1.desc': 'Lade Match-Videos hoch, verbinde Wearables oder streame Live-Feeds. Unsere Plattform ingestiert Daten aus jeder Quelle.',
+                'how.s1.desc': 'Laden Sie Spielvideos hoch, verbinden Sie Wearables oder streamen Sie Live-Feeds. Unsere Plattform verarbeitet Daten aus jeder Quelle.',
                 'how.s2.title': 'KI verarbeitet',
                 'how.s2.desc': 'Vision-Modelle extrahieren Pose-Daten, während Transformer Bewegungen in taktische Repräsentationen kodieren.',
-                'how.s3.title': 'Insights erhalten',
-                'how.s3.desc': 'Dashboards mit Bewegungs-Signaturen, taktischen Karten, Health Scores und Predictive Analytics — in Echtzeit.',
+                'how.s3.title': 'Erkenntnisse erhalten',
+                'how.s3.desc': 'Übersichten mit Bewegungs-Signaturen, taktischen Karten, Gesundheits- & Bereitschaftswerten und prädiktiver Analytik — in Echtzeit.',
 
                 'tech.label': 'Unter der Haube',
-                'tech.title': 'Auf cutting-edge Forschung gebaut.',
-                'tech.desc': 'Unsere Plattform nutzt neueste Fortschritte in Computer Vision, Self-Supervised Learning und Real-Time Systems Engineering.',
+                'tech.title': 'Auf Spitzenforschung gebaut.',
+                'tech.desc': 'Unsere Plattform nutzt neueste Fortschritte in Computervision, selbstüberwachtem Lernen und Echtzeitsystemtechnik.',
                 'tech.c1.label': 'Architektur',
-                'tech.c1.title': 'Pose Transformer',
-                'tech.c1.desc': 'Spatiotemporaler Transformer für 17-Keypoint-Sequenzen — lernt Repräsentationen von Körpersprache und Bewegungsintention.',
-                'tech.c2.label': 'Pre-Training',
-                'tech.c2.title': 'Masked Joint Modeling',
-                'tech.c2.desc': 'Self-supervised Pre-Training auf tausenden Sequenzen via Masked-Joint-Prediction — rekonstruiert fehlende Pose-Information.',
-                'tech.c3.label': 'Repräsentation',
-                'tech.c3.title': 'Kontrastives Lernen',
-                'tech.c3.desc': 'VICReg- und Barlow-Twins-Ziele erzeugen robuste Embeddings — invariant gegenüber Kamerawinkel und Spieleridentität.',
-                'tech.c4.label': 'Deployment',
-                'tech.c4.title': 'Echtzeit-Pipeline',
-                'tech.c4.desc': 'End-to-End Inferenz für Live-Analyse mit <40 ms Latenz pro Frame — vom Video-Input bis zum taktischen Output.',
+                'tech.c1.title': 'Hierarchischer Bewegungs-Transformer',
+                'tech.c1.desc': 'Multi-Scale-Transformer mit Graph-Attention auf Gelenkebene und kausalen temporalen Schichten. Räumliche Selbstaufmerksamkeit erfasst Abhängigkeiten über die gesamte Skelett-Topologie, während hierarchische Zeitmodellierung Bewegung auf mehreren Granularitäten auflöst — von Mikro-Aktionen im Sekundenbruchteil bis zu taktischen Bögen über ganze Ballbesitzphasen.',
+                'tech.c2.label': 'Grundmodell',
+                'tech.c2.title': 'Fußball-Grundlagenmodell',
+                'tech.c2.desc': 'Vortrainiert auf Millionen von Bewegungssequenzen über Ligen, Leistungsniveaus und Spielstile hinweg. Ein einziges großskaliges Modell, das sich mit minimalem Fine-Tuning auf jede nachgelagerte Aufgabe übertragen lässt — vom Verletzungsrisiko bis zur taktischen Klassifikation.',
+                'tech.c3.label': 'Simulation',
+                'tech.c3.title': 'Neuronale Spielsimulation',
+                'tech.c3.desc': 'Generative Rollouts vollständiger taktischer Szenarien. Der diffusionsbasierte Simulator modelliert die gemeinsame Verteilung aller Akteure auf dem Feld — kontrafaktische Analyse und Was-wäre-wenn-Szenarien auf Spielzugebene.',
+                'tech.c4.label': 'Infrastruktur',
+                'tech.c4.title': 'Edge-optimierte Inferenz',
+                'tech.c4.desc': 'Quantisierte Modelldestillation und hardwarebewusste Graph-Kompilierung für den Einsatz am Edge. Asynchrone Pipeline mit gebündelter Posenschätzung, Streaming-Transformer-Inferenz und lockfreier Ergebnisaggregation — Sub-Frame-Latenz vom Rohvideo bis zur taktischen Ausgabe.',
+                'tech.tag.graph_attention': 'Graph-Attention',
+                'tech.tag.causal_masking': 'Kausale Maskierung',
+                'tech.tag.multi_scale': 'Multi-Scale',
+                'tech.tag.foundation_model': 'Foundation Model',
+                'tech.tag.transfer_learning': 'Transfer Learning',
+                'tech.tag.scale': 'Skalierung',
+                'tech.tag.diffusion': 'Diffusion',
+                'tech.tag.counterfactual': 'Kontrafaktisch',
+                'tech.tag.generation': 'Generierung',
+                'tech.tag.model_distillation': 'Modelldestillation',
+                'tech.tag.edge_compute': 'Edge-Computing',
+                'tech.tag.async_pipeline': 'Async-Pipeline',
 
-                'cta.label': 'Early Access',
-                'cta.title': 'Bereit zu sehen, was dir entgeht?',
-                'cta.desc': 'Trag dich in die Warteliste ein. Sei unter den Ersten, die die verborgene Intelligenz des Fußballs freischalten.',
-                'cta.placeholder': 'deine@email.com',
+                'cta.label': 'Frühzugang',
+                'cta.title': 'Bereit zu sehen, was Ihnen entgeht?',
+                'cta.desc': 'Tragen Sie sich in die Warteliste ein. Seien Sie unter den Ersten, die die verborgene Intelligenz des Fußballs freischalten.',
+                'cta.placeholder': 'Ihre@email.com',
                 'cta.email_aria': 'E-Mail-Adresse',
-                'cta.submit': 'Zur Warteliste',
-                'cta.success': 'Erledigt! Wir melden uns in Kürze.',
+                'cta.submit': 'Auf die Warteliste',
+                'cta.success': 'Sie sind dabei! Wir melden uns bald.',
+                'cta.error': 'Konnte gerade nicht gesendet werden \u2014 bitte versuchen Sie es gleich nochmal.',
+                'cta.throttle': 'Ihr Interesse ist notiert! Bitte warten Sie einen Moment vor dem erneuten Absenden.',
+                'cta.typo': 'Meinten Sie {email}? Nochmal absenden zum Best\u00e4tigen.',
+                'cta.duplicate': 'Sie stehen bereits auf der Liste \u2014 wir melden uns bald!',
 
                 'footer.built_by': 'Gebaut von',
                 'footer.features': 'Funktionen',
                 'footer.tech': 'Technologie',
-                'footer.contact': 'Kontakt'
+                'footer.contact': 'Kontakt',
+                'footer.linkedin': 'LinkedIn',
+                'footer.instagram': 'Instagram',
+                'footer.twitter': 'Twitter',
+                'footer.github': 'GitHub'
             },
             tr: {
-                'meta.title': 'withoutball — Yapay Zekâ ile Futbol Zekâsı',
-                'meta.description': 'Kişisel biyomekanikten profesyonel maç analitiğine. Ham hareket verisini kazandıran içgörülere dönüştüren tek bir YZ platformu.',
+                'meta.title': 'WithoutBall — Yapay Zekâ Destekli Futbol Zekâsı',
+                'meta.description': 'Kişisel biyomekanikten profesyonel maç analizine. Ham hareket verisini kazandıran içgörülere dönüştüren yapay zekâ destekli platform.',
 
-                'nav.home': 'withoutball ana sayfa',
-                'nav.menu': 'Menüyü aç/kapat',
+                'nav.home': 'WithoutBall ana sayfa',
                 'nav.language': 'Dil',
                 'nav.solutions': 'Çözümler',
                 'nav.capabilities': 'Yetenekler',
@@ -1721,18 +1994,20 @@
                 'nav.tech': 'Teknoloji',
                 'nav.team': 'Ekip',
                 'nav.cta': 'Erken Erişim',
+                'nav.menu_open': 'Gezinme menüsünü aç',
+                'nav.menu_close': 'Gezinme menüsünü kapat',
 
-                'hero.badge': 'Yeni Nesil Futbol Zekâsı · Geliştiriliyor',
-                'hero.title_1': 'Futbolun yeni',
-                'hero.title_2': 'zeka katmanı.',
-                'hero.subtitle': 'Kişisel biyomekanikten profesyonel maç analitiğine — ham hareketi kazandıran içgörülere dönüştüren yeni nesil YZ + büyük veri platformu.',
+                'hero.badge': 'Yeni Nesil Futbol Zekâsı · Çok yakında',
+                'hero.title_1': 'Modern futbolun',
+                'hero.title_2': 'zekâ katmanı.',
+                'hero.subtitle': 'Kişisel biyomekanikten profesyonel maç analizine — ham hareketi kazandıran içgörülere dönüştüren yeni nesil yapay zekâ + büyük veri platformu.',
                 'hero.chip_1': 'Büyük Veri Ölçeğinde',
                 'hero.chip_2': 'Yeni Nesil YZ',
-                'hero.chip_3': 'Topsuz Zekâ',
+                'hero.chip_3': 'Topsuz Oyun Zekâsı',
                 'hero.chip_4': 'Gerçek Zamanlı Paneller',
-                'hero.primary': 'Erken Erişim İste',
-                'hero.secondary': 'Platformu Keşfet',
-                'hero.scroll': 'Kaydır',
+                'hero.primary': 'Erken Erişim İsteyin',
+                'hero.secondary': 'Platformu Keşfedin',
+                'hero.scroll': 'Kaydırın',
 
                 'marquee.data_points': 'Maç başına veri noktası',
                 'marquee.realtime': 'Gerçek Zamanlı',
@@ -1745,61 +2020,78 @@
                 'marquee.tactical': 'Taktik Zekâ',
 
                 'stats.data_points': 'Maç başına veri noktası',
-                'stats.keypoints': 'Takip edilen iskelet noktası',
+                'stats.keypoints': 'Takip edilen iskelet noktaları',
                 'stats.inference': 'Gerçek zamanlı poz çıkarımı',
                 'stats.accuracy': 'Tahmin doğruluğu',
 
                 'team.label': 'Ekip',
-                'team.title': 'Oyunu gerçekten anlayanlar tarafından.',
-                'team.desc': 'Makine öğrenmesi araştırmacıları, mühendisler ve futbol profesyonelleri — sporun geleceği için ortak bir vizyonda buluşuyor.',
+                'team.title': 'Oyunu anlayan insanlar tarafından kuruldu.',
+                'team.desc': 'Makine öğrenmesi araştırmacıları, mühendisler ve futbol profesyonelleri — sporun geleceği için ortak bir vizyonla bir araya geldi.',
                 'team.kemal.role': 'CEO · Kurucu Ortak',
-                'team.kemal.desc': 'Helmholtz Munich & TUM’da makine öğrenmesi doktorası. Dünyanın önde gelen AI-for-science laboratuvarlarından birinde derin üretici modeller geliştiriyor. Araştırmayı ürüne dönüştürüyor.',
+                'team.kemal.desc': 'Helmholtz Munich & TUM’da makine öğrenmesi doktorası. Dünyanın önde gelen bilim için yapay zekâ laboratuvarlarından birinde derin üretici modeller geliştiriyor. Araştırmayı ürüne dönüştürüyor.',
                 'team.ozgur.role': 'Kurucu Ortak · Mühendislik',
                 'team.ozgur.desc': 'Donanım algılama, biyomekanik ve ölçeklenebilir yazılım arasında köprü kuran makine mühendisi. Ham hareket verisini üretim kalitesinde zekâya dönüştüren sistemleri tasarlar.',
                 'team.fabian.role': 'Kurucu Ortak · ML & YZ',
-                'team.fabian.desc': 'TUM’da profesör ve Helmholtz Munich’te direktör. Leibniz Ödülü sahibi, ERC Advanced Grant sahibi ve Avrupa’da en çok atıf alan bilim insanlarından biri.',
+                'team.fabian.desc': 'TUM’da profesör ve Helmholtz Munich’te direktör. Leibniz Ödülü sahibi, ERC Advanced Grant sahibi ve yaşam bilimleri için makine öğrenmesi alanında Avrupa’nın en çok atıf alan bilim insanlarından biri.',
                 'team.seref.role': 'Kurucu Ortak · Futbol',
                 'team.seref.desc': 'UEFA A lisanslı, elit seviyede iki on yıl tecrübeli antrenör. Beşiktaş’ı üst üste Süper Lig şampiyonluğuna taşıdı ve Türkiye Milli Takımı’nda görev yaptı. Yapay zekânın sahaya uygun kalmasını sağlar.',
 
                 'solutions.label': 'Çözümler',
-                'solutions.title': 'Oyunun her seviyesi için.',
-                'solutions.desc': 'İster kişisel performansını optimize et, ister profesyonel takım yönet — platformumuz ihtiyacına uyum sağlar.',
+                'solutions.title': 'Oyunun her seviyesi için tasarlandı.',
+                'solutions.desc': 'İster kişisel performansınızı optimize edin ister profesyonel takımları yönetin — yapay zekâ platformumuz ihtiyaçlarınıza uyum sağlar.',
                 'solutions.individual.tag': 'Bireysel',
                 'solutions.individual.title': 'Kişisel Performans',
-                'solutions.individual.desc': 'Koşu biyomekaniğini optimize et, sakatlık riskini azalt ve hareket analizi ile atletik potansiyelini açığa çıkar.',
+                'solutions.individual.desc': 'Koşu biyomekaniğinizi optimize edin, sakatlıkları önleyin ve yapay zekâ destekli hareket analizi ile atletik potansiyelinizi açığa çıkarın.',
                 'solutions.individual.f1': 'Biyomekanik adım analizi',
                 'solutions.individual.f2': 'Koşu sağlığı takibi',
                 'solutions.individual.f3': 'Performans potansiyeli haritası',
                 'solutions.individual.f4': 'Kişiselleştirilmiş antrenman içgörüleri',
                 'solutions.pro.tag': 'Profesyonel',
                 'solutions.pro.title': 'Takım Zekâsı',
-                'solutions.pro.desc': 'Kulüpler ve antrenörler için yeni nesil büyük veri analitiği. Formasyonlar, topsuz metrikler ve maç zekâsı — ölçeklenebilir.',
+                'solutions.pro.desc': 'Kulüpler ve antrenörler için yeni nesil büyük veri analitiği. Taktik formasyonlar, topsuz metrikler ve ölçekte maç zekâsı.',
                 'solutions.pro.f1': 'Taktik formasyon analizi',
                 'solutions.pro.f2': 'Oyuncu performans paneli',
-                'solutions.pro.f3': 'Takım sağlık & hazır olma skoru',
-                'solutions.pro.f4': 'Maç zekâsı (büyük veri)',
+                'solutions.pro.f3': 'Takım sağlık & hazırlık skoru',
+                'solutions.pro.f4': 'Büyük veri maç zekâsı',
 
-                'capabilities.label': 'Yetenekler',
-                'capabilities.title': 'Gelişmiş YZ ile güçlenir.',
-                'capabilities.desc': 'Maç görüntüsünü aksiyon alınabilir zekâya dönüştüren altı temel yetenek — iskelet takibinden öngörü analitiğine.',
-                'capabilities.pose.title': 'Poz Tahmini',
-                'capabilities.pose.desc': 'Sahadaki her oyuncu için 25 fps’de 17 noktalı iskelet takibi — özel transformer mimarimizle.',
-                'capabilities.signatures.title': 'Hareket İmzaları',
-                'capabilities.signatures.desc': 'Topa sahip olmayan hareketleri tanımlayan benzersiz imzalar — ligler ve sezonlar arasında karşılaştırma.',
-                'capabilities.clustering.title': 'Taktik Kümelenme',
-                'capabilities.clustering.desc': 'Savunma yapıları, pres desenleri ve alan stratejilerini otomatik grupla ve sınıflandır.',
-                'capabilities.spatial.title': 'Uzamsal Zekâ',
-                'capabilities.spatial.desc': 'Isı haritaları, Voronoi ve pitch-control modelleri ile alan yaratma ve savunma kapsamasını ölç.',
-                'capabilities.predictive.title': 'Öngörülü Koşular',
-                'capabilities.predictive.desc': 'Oyuncu rotalarını 2–3 saniye öngörerek koşu, overlap ve pres tetiklerini erken yakala.',
-                'capabilities.readiness.title': 'Maç Hazırlığı',
-                'capabilities.readiness.desc': 'Yoğunluk, pozisyon disiplini ve yorgunluk göstergeleriyle fiziksel ve taktik hazırlığı puanla.',
+	                'capabilities.label': 'Yetenekler',
+	                'capabilities.title': 'Gelişmiş yapay zekâ ile güçlendirildi.',
+	                'capabilities.desc': 'Verinizle neler mümkün: maç içi poz takibinden sezon ölçeğinde aramaya, sakatlık sinyallerine ve yeni nesil scouting’e.',
+	                'capabilities.pose.label': 'Bilgisayarlı Görü',
+	                'capabilities.pose.title': 'Poz Tahmini',
+	                'capabilities.pose.desc': 'Yayına hazır 25 fps çoklu oyuncu poz çıkarımı — oyuncu başına 17 iskelet noktası; gerçek maç görüntüsü için stabilize edilmiş ve tüm alt modelleri besleyecek şekilde tasarlanmış.',
+	                'capabilities.signatures.label': 'Derin Öğrenme',
+	                'capabilities.signatures.title': 'Hareket İmzaları',
+	                'capabilities.signatures.desc': 'Topsuz oyun davranışı için kompakt hareket gömmeleri — rol, stil ve eğilimleri ligler ile sezonlar arasında kıyaslayın.',
+	                'capabilities.profiling.label': 'Gömme Uzayı',
+	                'capabilities.profiling.title': 'Ölçeklenebilir Oyuncu Profili',
+	                'capabilities.profiling.desc': 'Her oyuncunun hareket imzasını ortak bir uzaya gömün. Scouting artık benzerlik araması: "şu oyuncu gibi hareket edenleri bulun."',
+	                'capabilities.search.label': 'Arama Motoru',
+	                'capabilities.search.title': 'Ölçekli Hareket Araması',
+	                'capabilities.search.desc': '\u201cBir stoperin 1\u2019e 1\u2019de her ge\u00e7ildi\u011fi an\u201d diye sorun; t\u00fcm sezonlarda sonu\u00e7lar\u0131 yakalay\u0131n \u2014 manuel etiket yok, sadece ham veri.',
+	                'capabilities.fingerprint.label': 'Örüntü Tanıma',
+	                'capabilities.fingerprint.title': 'Taktik Parmak İzi',
+	                'capabilities.fingerprint.desc': 'Tek bir insan anotasyonu olmadan oyun stilini, formasyonları ve geçişleri otomatik çıkarın — rakibi veritabanı sorgusu gibi karşılaştırın.',
+	                'capabilities.clustering.label': 'Denetimsiz ML',
+	                'capabilities.clustering.title': 'Taktik Kümelenme',
+	                'capabilities.clustering.desc': 'Pres şemaları, savunma blokları ve geçiş desenlerini anotasyonsuz keşfedin — örüntüler kendiliğinden kümelensin.',
+	                'capabilities.predictive.label': 'Tahminleme',
+	                'capabilities.predictive.title': 'Öngörülü Koşular',
+	                'capabilities.predictive.desc': '2–3 sn ufukta olasılıksal tahmin: koşuları, bindirmeleri ve pres tetiklerini daha olmadan görün.',
+	                'capabilities.injury.label': 'Biyomekanik',
+	                'capabilities.injury.title': 'Sakatlık Riski Sinyalleri',
+	                'capabilities.injury.desc': 'Klinik belirti ortaya çıkmadan haftalar önce biyomekanikteki ince kaymaları yakalayın — eşikleri oyuncu, rol ve yüke göre kişiselleştirin.',
+	                'capabilities.readiness.label': 'Performans Bilimi',
+	                'capabilities.readiness.title': 'Maç Hazırlığı',
+	                'capabilities.readiness.desc': 'Yoğunluk, koordinasyon ve toparlanma sinyallerini tek bir hazırlık endeksine çevirin — antrenman yükü ve maç kararları için.',
 
                 'preview.label': 'Canlı Önizleme',
-                'preview.title': 'Görünmeyeni gör.',
+                'preview.title': 'Görünmeyeni görün.',
                 'preview.desc': 'Her oyuncunun pozu, hareket vektörü ve uzamsal ilişkisi — maç verisinden gerçek zamanlı olarak görselleştirilir.',
+                'preview.live': 'CANLI',
                 'preview.players': '22 OYUNCU',
                 'preview.keypoints': '374 NOKTA',
+                'preview.window_title': 'WithoutBall — mac_analizi.live',
                 'preview.modes_aria': 'Önizleme modu',
                 'preview.mode_skeleton': 'İskelet',
                 'preview.mode_space': 'Alan',
@@ -1807,46 +2099,66 @@
 
                 'how.label': 'Süreç',
                 'how.title': 'Ham veriden taktik zekâya.',
-                'how.desc': 'Maç görüntüsünü rekabet avantajı sağlayan içgörülere dönüştürmek için üç basit adım.',
-                'how.s1.title': 'Verini Bağla',
-                'how.s1.desc': 'Maç görüntüsünü yükle, giyilebilir sensörleri bağla veya canlı akış gönder. Platformumuz her kaynaktan veri alır.',
-                'how.s2.title': 'YZ İşler',
-                'how.s2.desc': 'Görsel modeller poz verisini çıkarır; transformer’lar hareketi taktik temsillere dönüştürür.',
-                'how.s3.title': 'İçgörü Al',
-                'how.s3.desc': 'Hareket imzaları, taktik haritalar, sağlık skorları ve öngörü analitiği panellerine gerçek zamanlı eriş.',
+                'how.desc': 'Maç görüntünüzü rekabet avantajı sağlayan uygulanabilir içgörülere dönüştürmek için üç basit adım.',
+                'how.s1.title': 'Verinizi Bağlayın',
+                'how.s1.desc': 'Maç görüntüsünü yükleyin, giyilebilir sensörleri bağlayın veya canlı akış gönderin. Platformumuz her kaynaktan veri alır.',
+                'how.s2.title': 'YZ İşlesin',
+                'how.s2.desc': 'Bilgisayarlı görü modelleri iskelet pozunu çıkarır; Transformer modelleri hareketi taktik temsillere kodlar.',
+                'how.s3.title': 'İçgörü Alın',
+                'how.s3.desc': 'Hareket imzaları, taktik haritalar, sağlık & hazırlık puanları ve öngörüler — gerçek zamanlı panellerde.',
 
                 'tech.label': 'Kaputun Altı',
-                'tech.title': 'En yeni araştırmalarla.',
-                'tech.desc': 'Platformumuz bilgisayarlı görü, self-supervised öğrenme ve gerçek zamanlı sistem mühendisliğindeki en son gelişmeleri kullanır.',
+                'tech.title': 'Son teknoloji araştırmalar üzerine kuruldu.',
+                'tech.desc': 'Platformumuz bilgisayarlı görü, özdenetimli öğrenme ve gerçek zamanlı sistem mühendisliğindeki en yeni gelişmeleri kullanır.',
                 'tech.c1.label': 'Mimari',
-                'tech.c1.title': 'Pose Transformer',
-                'tech.c1.desc': '17 noktalı iskelet dizilerini işleyen özel uzay-zaman transformer’ı — beden dili ve hareket niyetinin temsillerini öğrenir.',
-                'tech.c2.label': 'Ön Eğitim',
-                'tech.c2.title': 'Masked Joint Modeling',
-                'tech.c2.desc': 'Binlerce maç dizisinde maskeli eklem tahminiyle self-supervised ön eğitim — eksik poz bilgisini yeniden kurar.',
-                'tech.c3.label': 'Temsil',
-                'tech.c3.title': 'Kontrastif Öğrenme',
-                'tech.c3.desc': 'VICReg ve Barlow Twins hedefleri, kamera açısı ve oyuncu kimliğinden bağımsız taktik benzerliği yakalayan gömmeler üretir.',
-                'tech.c4.label': 'Dağıtım',
-                'tech.c4.title': 'Gerçek Zamanlı Hat',
-                'tech.c4.desc': 'Canlı maç analizi için uçtan uca çıkarım hattı: kare başına 40 ms altı gecikme ile video girdisinden taktik çıktıya.',
+                'tech.c1.title': 'Hiyerarşik Hareket Transformer',
+                'tech.c1.desc': 'Eklem düzeyinde graf dikkat mekanizması ve nedensel zamansal katmanlarla çok ölçekli Transformer. Uzamsal öz-dikkat iskelet topolojisi genelinde eklemler arası bağımlılıkları çözerken, hiyerarşik zamansal modelleme hareketi birden fazla granülaritede yakalar — saniye altı mikro-aksiyonlardan tam top sahipliği taktik yaylarına.',
+                'tech.c2.label': 'Temel Model',
+                'tech.c2.title': 'Futbol Temel Modeli',
+                'tech.c2.desc': 'Ligler, seviyeler ve oyun stilleri genelinde milyonlarca hareket sekansı üzerinde ön eğitimli. Minimum ince ayarla sakatlık riskinden taktik sınıflandırmaya kadar her alt göreve aktarılabilen tek bir büyük ölçekli model.',
+                'tech.c3.label': 'Simülasyon',
+                'tech.c3.title': 'Nöral Maç Simülasyonu',
+                'tech.c3.desc': 'Tam taktik senaryoların üretici rollout\'ları. Difüzyon tabanlı simülatör, sahadaki tüm aktörlerin ortak dağılımını modelleyerek oyun seviyesinde karşıolgusal analiz ve olası senaryo değerlendirmesi sunar.',
+                'tech.c4.label': 'Altyapı',
+                'tech.c4.title': 'Uç-Optimizasyonlu Çıkarım',
+                'tech.c4.desc': 'Kuantize model distilasyonu ve donanım duyarlı graf derleme ile uç cihaz dağıtımı. Toplu poz tahmini, akış Transformer çıkarımı ve kilitsiz sonuç birleştirmeli asenkron hat — ham videodan taktik çıktıya kare-altı gecikme.',
+                'tech.tag.graph_attention': 'Graf Dikkat',
+                'tech.tag.causal_masking': 'Nedensel Maskeleme',
+                'tech.tag.multi_scale': 'Çok Ölçekli',
+                'tech.tag.foundation_model': 'Temel Model',
+                'tech.tag.transfer_learning': 'Transfer Öğrenme',
+                'tech.tag.scale': 'Ölçek',
+                'tech.tag.diffusion': 'Difüzyon',
+                'tech.tag.counterfactual': 'Karşıolgusal',
+                'tech.tag.generation': 'Üretim',
+                'tech.tag.model_distillation': 'Model Distilasyonu',
+                'tech.tag.edge_compute': 'Uç Hesaplama',
+                'tech.tag.async_pipeline': 'Asenkron Hat',
 
                 'cta.label': 'Erken Erişim',
-                'cta.title': 'Eksik olanı görmeye hazır mısın?',
-                'cta.desc': 'Bekleme listesine katıl. Futbolun gizli zeka katmanını açan ilk kişilerden ol.',
-                'cta.placeholder': 'senin@email.com',
+                'cta.title': 'Neler kaçırdığınızı görmeye hazır mısınız?',
+                'cta.desc': 'Bekleme listesine katılın. Futbolun gizli zekâ katmanını ilk açanlardan olun.',
+                'cta.placeholder': 'sizin@email.com',
                 'cta.email_aria': 'E-posta adresi',
-                'cta.submit': 'Listeye Katıl',
-                'cta.success': 'Eklendi! Yakında iletişime geçeceğiz.',
+                'cta.submit': 'Listeye Katılın',
+                'cta.success': 'Listedesiniz! Yakında iletişime geçeceğiz.',
+                'cta.error': '\u015eu an g\u00f6nderemedik \u2014 l\u00fctfen birazdan tekrar deneyin.',
+                'cta.throttle': '\u0130lginizi ald\u0131k! Tekrar g\u00f6ndermeden \u00f6nce l\u00fctfen biraz bekleyin.',
+                'cta.typo': '{email} mi demek istediniz? Onaylamak i\u00e7in tekrar g\u00f6nderin.',
+                'cta.duplicate': 'Zaten listedesiniz \u2014 yak\u0131nda sizinle ileti\u015fime ge\u00e7ece\u011fiz!',
 
                 'footer.built_by': 'Geliştiren',
                 'footer.features': 'Özellikler',
                 'footer.tech': 'Teknoloji',
-                'footer.contact': 'İletişim'
+                'footer.contact': 'İletişim',
+                'footer.linkedin': 'LinkedIn',
+                'footer.instagram': 'Instagram',
+                'footer.twitter': 'Twitter',
+                'footer.github': 'GitHub'
             }
         };
 
-        function t(key, lang) {
+        function translate(key, lang) {
             const dict = I18N[lang] || I18N.en;
             if (dict && Object.prototype.hasOwnProperty.call(dict, key)) return dict[key];
             if (I18N.en && Object.prototype.hasOwnProperty.call(I18N.en, key)) return I18N.en[key];
@@ -1854,15 +2166,15 @@
         }
 
         function applyI18n(lang) {
-            const title = t('meta.title', lang);
+            const title = translate('meta.title', lang);
             if (title && title !== 'meta.title') document.title = title;
             const metaDesc = document.querySelector('meta[name="description"]');
-            const desc = t('meta.description', lang);
+            const desc = translate('meta.description', lang);
             if (metaDesc && desc && desc !== 'meta.description') metaDesc.setAttribute('content', desc);
 
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.dataset.i18n;
-                el.textContent = t(key, lang);
+                el.textContent = translate(key, lang);
             });
 
             document.querySelectorAll('[data-i18n-attr]').forEach(el => {
@@ -1873,7 +2185,7 @@
                     const attr = pair.slice(0, idx).trim();
                     const key = pair.slice(idx + 1).trim();
                     if (!attr || !key) return;
-                    el.setAttribute(attr, t(key, lang));
+                    el.setAttribute(attr, translate(key, lang));
                 });
             });
         }
@@ -1881,31 +2193,52 @@
         /* ========== LANGUAGE SELECTOR (LIVE UPDATE) ========== */
         (function initLanguageSelector() {
             const langSelect = document.getElementById('langSelect');
-            if (!langSelect) return;
+            const langSelectMobile = document.getElementById('langSelectMobile');
+            const selectors = [langSelect, langSelectMobile].filter(Boolean);
+            if (!selectors.length) return;
 
             function setLang(code, persist) {
                 root.lang = code;
                 root.dataset.lang = code;
+                root.setAttribute('lang', code);
                 if (persist) {
                     try { localStorage.setItem('wb.lang', code); } catch (e) {}
                 }
                 applyI18n(code);
                 // Text length changes can affect ScrollTrigger measurements.
-                if (ScrollTrigger) {
-                    requestAnimationFrame(() => requestAnimationFrame(() => {
-                        try { ScrollTrigger.refresh(); } catch (e) {}
-                    }));
-                }
+                // We dispatch an event and let the GSAP/ScrollTrigger init (if present) handle refresh.
+                try { window.dispatchEvent(new CustomEvent('wb:lang', { detail: { lang: code } })); } catch (e) {}
             }
 
-            let initial = root.lang || 'en';
-            try { initial = localStorage.getItem('wb.lang') || initial; } catch (e) {}
-            if (!initial && navigator.language) initial = navigator.language.slice(0, 2);
-            if (!['en', 'tr', 'de'].includes(initial)) initial = 'en';
+            const supported = ['en', 'tr', 'de'];
 
-            langSelect.value = initial;
+            function detectLang() {
+                try {
+                    const prefs = []
+                        .concat((navigator.languages || []))
+                        .concat([navigator.language, navigator.userLanguage])
+                        .filter(Boolean);
+                    for (const tag of prefs) {
+                        const code = String(tag).toLowerCase().split('-')[0];
+                        if (supported.includes(code)) return code;
+                    }
+                } catch (e) {}
+                return 'en';
+            }
+
+            let initial = '';
+            try { initial = (localStorage.getItem('wb.lang') || ''); } catch (e) {}
+            initial = String(initial).toLowerCase().split('-')[0];
+            if (!supported.includes(initial)) initial = detectLang();
+
+            selectors.forEach(select => { select.value = initial; });
             setLang(initial, false);
-            langSelect.addEventListener('change', () => setLang(langSelect.value, true));
+            selectors.forEach(select => {
+                select.addEventListener('change', () => {
+                    selectors.forEach(other => { if (other !== select) other.value = select.value; });
+                    setLang(select.value, true);
+                });
+            });
         })();
 
         /* ========== NAV SCROLL ========== */
@@ -1914,181 +2247,419 @@
             nav.classList.toggle('scrolled', window.scrollY > 60);
         }, { passive: true });
 
-        /* ========== MOBILE MENU ========== */
-        const navToggle = document.getElementById('navToggle');
-        const mobileMenu = document.getElementById('mobileMenu');
-        function setScrollLock(locked) {
-            const scrollBarWidth = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
-            document.body.style.overflow = locked ? 'hidden' : '';
-            document.body.style.paddingRight = locked ? scrollBarWidth + 'px' : '';
-        }
-        function closeMobileMenu() {
-            navToggle.classList.remove('active');
-            mobileMenu.classList.remove('open');
-            navToggle.setAttribute('aria-expanded', 'false');
-            setScrollLock(false);
-        }
-        navToggle.addEventListener('click', () => {
-            navToggle.classList.toggle('active');
-            mobileMenu.classList.toggle('open');
-            navToggle.setAttribute('aria-expanded', mobileMenu.classList.contains('open') ? 'true' : 'false');
-            setScrollLock(mobileMenu.classList.contains('open'));
-        });
-        document.querySelectorAll('.mobile-link').forEach(link => {
-            link.addEventListener('click', () => {
-                closeMobileMenu();
-            });
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key !== 'Escape') return;
-            if (mobileMenu.classList.contains('open')) closeMobileMenu();
-        });
+        /* ========== MOBILE NAV ========== */
+        (function initMobileNav() {
+            const menuBtn = document.getElementById('navMenuBtn');
+            const menuPanel = document.getElementById('navMobilePanel');
+            const menuOverlay = document.getElementById('navMobileOverlay');
+            if (!menuBtn || !menuPanel || !menuOverlay) return;
 
-        /* ========== SCROLL PROGRESS BAR ========== */
-        (function initScrollProgress() {
-            const bar = document.getElementById('scrollProgress');
-            if (!bar) return;
-            if (gsap && ScrollTrigger) {
-                gsap.to(bar, {
-                    scaleX: 1,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: document.body,
-                        start: 'top top',
-                        end: 'bottom bottom',
-                        scrub: 0.3
-                    }
-                });
-                return;
+            // Keep this in sync with the CSS breakpoint that hides `.nav-center`/`.nav-end`
+            // and shows the burger button (currently `@media (max-width: 1100px)`).
+            const desktopQuery = window.matchMedia('(min-width: 1101px)');
+
+            function menuLabel(open) {
+                const lang = root.dataset.lang || root.lang || 'en';
+                return translate(open ? 'nav.menu_close' : 'nav.menu_open', lang);
             }
-            const update = () => {
-                const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-                const p = Math.min(1, Math.max(0, window.scrollY / max));
-                bar.style.transformOrigin = 'left';
-                bar.style.transform = 'scaleX(' + p + ')';
-            };
-            update();
-            window.addEventListener('scroll', update, { passive: true });
-            window.addEventListener('resize', update, { passive: true });
+
+            function setMenu(open) {
+                if (desktopQuery.matches) open = false;
+                menuPanel.dataset.open = open ? 'true' : 'false';
+                menuOverlay.dataset.open = open ? 'true' : 'false';
+                menuPanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+                menuBtn.setAttribute('aria-expanded', String(open));
+                menuBtn.setAttribute('aria-label', menuLabel(open));
+                nav.classList.toggle('menu-open', open);
+                document.body.classList.toggle('menu-open', open);
+            }
+
+            function closeMenu() { setMenu(false); }
+
+            menuBtn.addEventListener('click', () => {
+                setMenu(menuPanel.dataset.open !== 'true');
+            });
+            menuOverlay.addEventListener('click', closeMenu);
+            menuPanel.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+            window.addEventListener('resize', () => {
+                if (desktopQuery.matches) closeMenu();
+            }, { passive: true });
+            window.addEventListener('wb:lang', () => {
+                const open = menuPanel.dataset.open === 'true';
+                menuBtn.setAttribute('aria-label', menuLabel(open));
+            }, { passive: true });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeMenu();
+            });
+
+            setMenu(false);
         })();
 
-        if (canAnimate) {
-            /* ========== HERO ENTRANCE ========== */
-            const heroTl = gsap.timeline({ delay: 0.3 });
-            heroTl
-                .to('.reveal-hero', { opacity: 1, duration: 0.01 })
-                .from('.hero-badge', { opacity: 0, y: 30, duration: 0.8, ease: 'power3.out' })
-                .from('.hero-title .line-inner', { yPercent: 110, duration: 1, ease: 'power4.out', stagger: 0.12 }, '-=0.4')
-                .from('.hero-subtitle', { opacity: 0, y: 20, duration: 0.8, ease: 'power3.out' }, '-=0.5')
-                .from('.hero-chips .hero-chip', { opacity: 0, y: 14, duration: 0.7, ease: 'power3.out', stagger: 0.06 }, '-=0.55')
-                .from('.hero-buttons', { opacity: 0, y: 20, duration: 0.7, ease: 'power3.out' }, '-=0.4')
-                .from('.scroll-hint', { opacity: 0, duration: 1, ease: 'power2.out' }, '-=0.3');
-        } else {
-            document.querySelectorAll('.reveal, .reveal-hero').forEach(el => {
-                el.style.opacity = '1';
-                el.style.transform = 'none';
-            });
-        }
+	        /* ========== MOTION (GSAP/ScrollTrigger) ========== */
+	        (function initMotionWhenReady() {
+	            let started = false;
+	
+	            function initMotion() {
+	                if (started) return;
+	                started = true;
+	
+	                const gsap = window.gsap;
+	                const ScrollTrigger = window.ScrollTrigger;
+	                const canAnimate = !!(gsap && ScrollTrigger && !reduceMotion);
 
-        // Font/layout shifts can slightly alter trigger positions.
-        if (ScrollTrigger) {
-            window.addEventListener('load', () => {
-                try { ScrollTrigger.refresh(); } catch (e) {}
-            });
-        }
+	                if (canAnimate) {
+	                    try {
+	                        gsap.set('.reveal-hero', { opacity: 0 });
+	                        gsap.set('.reveal', { opacity: 0, y: 40 });
+	                    } catch (e) {}
+	                }
+	
+	                if (gsap && ScrollTrigger) {
+	                    try { gsap.registerPlugin(ScrollTrigger); } catch (e) {}
+	                    // Refresh ScrollTrigger measurements when i18n updates text lengths.
+	                    window.addEventListener('wb:lang', () => {
+	                        requestAnimationFrame(() => requestAnimationFrame(() => {
+	                            try { ScrollTrigger.refresh(); } catch (e) {}
+	                        }));
+	                    }, { passive: true });
+	
+	                    // Smoothly adapt to resizes (especially when resizing the window manually).
+	                    let stRefreshTimer = null;
+	                    window.addEventListener('resize', () => {
+	                        clearTimeout(stRefreshTimer);
+	                        stRefreshTimer = setTimeout(() => {
+	                            try { ScrollTrigger.refresh(); } catch (e) {}
+	                        }, 180);
+	                    }, { passive: true });
+	                }
+	
+	                /* Scroll progress bar */
+	                (function initScrollProgress() {
+	                    const bar = document.getElementById('scrollProgress');
+	                    if (!bar) return;
+	                    if (gsap && ScrollTrigger && !reduceMotion) {
+	                        gsap.to(bar, {
+	                            scaleX: 1,
+	                            ease: 'none',
+	                            scrollTrigger: {
+	                                trigger: document.body,
+	                                start: 'top top',
+	                                end: 'bottom bottom',
+	                                scrub: 0.3
+	                            }
+	                        });
+	                        return;
+	                    }
+	                    const update = () => {
+	                        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+	                        const p = Math.min(1, Math.max(0, window.scrollY / max));
+	                        bar.style.transformOrigin = 'left';
+	                        bar.style.transform = 'scaleX(' + p + ')';
+	                    };
+	                    update();
+	                    window.addEventListener('scroll', update, { passive: true });
+	                    window.addEventListener('resize', update, { passive: true });
+	                })();
+	
+	                /* Hero entrance */
+	                if (canAnimate) {
+	                    const heroTl = gsap.timeline({ delay: 0.3 });
+	                    heroTl
+	                        .to('.reveal-hero', { opacity: 1, duration: 0.01 })
+	                        .from('.hero-badge', { opacity: 0, y: 30, duration: 0.8, ease: 'power3.out' })
+	                        .from('.hero-title .line-inner', { yPercent: 110, duration: 1, ease: 'power4.out', stagger: 0.12 }, '-=0.4')
+	                        .from('.hero-subtitle', { opacity: 0, y: 20, duration: 0.8, ease: 'power3.out' }, '-=0.5')
+	                        .from('.hero-chips .hero-chip', { opacity: 0, y: 14, duration: 0.7, ease: 'power3.out', stagger: 0.06 }, '-=0.55')
+	                        .from('.hero-buttons', { opacity: 0, y: 20, duration: 0.7, ease: 'power3.out' }, '-=0.4')
+	                        .from('.scroll-hint', { opacity: 0, duration: 1, ease: 'power2.out' }, '-=0.3');
+	                } else {
+	                    document.querySelectorAll('.reveal-hero').forEach(el => {
+	                        el.style.opacity = '1';
+	                    });
+	                    document.querySelectorAll('.reveal').forEach(el => {
+	                        el.style.opacity = '1';
+	                        el.style.transform = 'none';
+	                    });
+	                }
+	
+	                // Font/layout shifts can slightly alter trigger positions.
+	                if (ScrollTrigger) {
+	                    window.addEventListener('load', () => {
+	                        try { ScrollTrigger.refresh(); } catch (e) {}
+	                    });
+	                }
+	
+	                /* Scroll reveals */
+	                if (canAnimate) {
+	                    gsap.utils.toArray('.reveal').forEach(el => {
+	                        if (el.closest('.founders-grid') ||
+	                            el.closest('.solutions-grid') || el.closest('.how-grid') ||
+	                            el.closest('.tech-grid') || el.closest('.cap-grid')) return;
+	                        ScrollTrigger.create({
+	                            trigger: el,
+	                            start: 'top 87%',
+	                            once: true,
+	                            onEnter: () => {
+	                                gsap.to(el, {
+	                                    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+	                                    onComplete: () => {
+	                                        el.style.removeProperty('opacity');
+	                                        el.style.removeProperty('transform');
+	                                        el.classList.remove('reveal');
+	                                    }
+	                                });
+	                            }
+	                        });
+	                    });
+	                }
+	
+	                /* Stagger reveals */
+	                function staggerGroup(parent, stagger) {
+	                    const container = document.querySelector(parent);
+	                    if (!container) return;
+	                    const items = container.querySelectorAll('.reveal');
+	                    ScrollTrigger.create({
+	                        trigger: container,
+	                        start: 'top 87%',
+	                        once: true,
+	                        onEnter: () => {
+	                            gsap.to(items, {
+	                                opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+	                                stagger: stagger,
+	                                onComplete: function() {
+	                                    this.targets().forEach(t => {
+	                                        t.style.removeProperty('opacity');
+	                                        t.style.removeProperty('transform');
+	                                        t.classList.remove('reveal');
+	                                    });
+	                                }
+	                            });
+	                        }
+	                    });
+	                }
+	                if (canAnimate) {
+	                    staggerGroup('.founders-grid', 0.1);
+	                    staggerGroup('.solutions-grid', 0.12);
+	                    staggerGroup('.how-grid', 0.15);
+	                    staggerGroup('.tech-grid', 0.1);
+	                    staggerGroup('.cap-grid', 0.1);
+	                }
+	
+	                /* Counter animation */
+	                document.querySelectorAll('[data-count]').forEach(el => {
+	                    const target = parseFloat(el.dataset.count);
+	                    const suffix = el.dataset.suffix || '';
+	                    const isDecimal = String(target).includes('.');
+	                    if (!canAnimate) {
+	                        el.textContent = (isDecimal ? target.toFixed(1) : Math.round(target)) + suffix;
+	                        return;
+	                    }
+	                    ScrollTrigger.create({
+	                        trigger: el,
+	                        start: 'top 87%',
+	                        once: true,
+	                        onEnter: () => {
+	                            gsap.to({ val: 0 }, {
+	                                val: target,
+	                                duration: 2.2,
+	                                ease: 'power2.out',
+	                                onUpdate: function() {
+	                                    const v = this.targets()[0].val;
+	                                    el.textContent = (isDecimal ? v.toFixed(1) : Math.round(v)) + suffix;
+	                                }
+	                            });
+	                        }
+	                    });
+	                });
+	
+	                /* 3D tilt cards */
+	                if (canAnimate && window.matchMedia('(pointer: fine)').matches) {
+	                    document.querySelectorAll('.audience-card, .tech-card, .founder-card').forEach(card => {
+	                        card.addEventListener('mouseenter', () => {
+	                            if (card.classList.contains('reveal')) return;
+	                            card.style.transition = 'border-color 0.4s, box-shadow 0.4s';
+	                        });
+	                        card.addEventListener('mousemove', e => {
+	                            if (card.classList.contains('reveal')) return;
+	                            const rect = card.getBoundingClientRect();
+	                            const x = (e.clientX - rect.left) / rect.width - 0.5;
+	                            const y = (e.clientY - rect.top) / rect.height - 0.5;
+	                            card.style.transform = 'perspective(800px) rotateY(' + (x * 5) + 'deg) rotateX(' + (-y * 5) + 'deg) translateY(-4px)';
+	                        });
+	                        card.addEventListener('mouseleave', () => {
+	                            if (card.classList.contains('reveal')) return;
+	                            card.style.transition = 'transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), border-color 0.4s, box-shadow 0.4s';
+	                            card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+	                            setTimeout(() => { card.style.transition = ''; card.style.transform = ''; }, 520);
+	                        });
+	                    });
+	                }
+	
+	                /* Magnetic buttons */
+	                if (canAnimate && gsap && window.matchMedia('(pointer: fine)').matches) {
+	                    document.querySelectorAll('.magnetic').forEach(btn => {
+	                        btn.addEventListener('mousemove', e => {
+	                            const rect = btn.getBoundingClientRect();
+	                            const x = e.clientX - rect.left - rect.width / 2;
+	                            const y = e.clientY - rect.top - rect.height / 2;
+	                            gsap.to(btn, { x: x * 0.15, y: y * 0.15, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
+	                        });
+	                        btn.addEventListener('mouseleave', () => {
+	                            gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
+	                        });
+	                    });
+	                }
+	            }
+	
+	            if (document.readyState === 'loading') {
+	                document.addEventListener('DOMContentLoaded', initMotion, { once: true });
+	            } else {
+	                initMotion();
+	            }
+	        })();
 
-        /* ========== SCROLL REVEALS ========== */
-        if (canAnimate) {
-            gsap.utils.toArray('.reveal').forEach(el => {
-                if (el.closest('.founders-grid') || el.closest('.features-h-track') ||
-                    el.closest('.solutions-grid') || el.closest('.how-grid') ||
-                    el.closest('.tech-grid')) return;
-                ScrollTrigger.create({
-                    trigger: el,
-                    start: 'top 87%',
-                    once: true,
-                    onEnter: () => {
-                        gsap.to(el, {
-                            opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-                            onComplete: () => {
-                                el.style.removeProperty('opacity');
-                                el.style.removeProperty('transform');
-                                el.classList.remove('reveal');
-                            }
-                        });
-                    }
-                });
-            });
-        }
 
-        /* Stagger reveals */
-        function staggerGroup(parent, stagger) {
-            const container = document.querySelector(parent);
-            if (!container) return;
-            const items = container.querySelectorAll('.reveal');
-            ScrollTrigger.create({
-                trigger: container,
-                start: 'top 87%',
-                once: true,
-                onEnter: () => {
-                    gsap.to(items, {
-                        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-                        stagger: stagger,
-                        onComplete: function() {
-                            this.targets().forEach(t => {
-                                t.style.removeProperty('opacity');
-                                t.style.removeProperty('transform');
-                                t.classList.remove('reveal');
-                            });
-                        }
-                    });
-                }
-            });
+        /* ========== LIGHTWEIGHT LOCALE HINTS (runs once, cached in sessionStorage) ========== */
+        if (!storageGet(sessionStorage, 'wb_country')) {
+            try {
+                var langTag = String(navigator.language || '');
+                var region = (langTag.split('-')[1] || '').toUpperCase();
+                if (region) storageSet(sessionStorage, 'wb_country', region);
+                storageSet(sessionStorage, 'wb_city', '');
+            } catch (e) {}
         }
-        if (canAnimate) {
-            staggerGroup('.founders-grid', 0.1);
-            staggerGroup('.features-h-track', 0.07);
-            staggerGroup('.solutions-grid', 0.12);
-            staggerGroup('.how-grid', 0.15);
-            staggerGroup('.tech-grid', 0.1);
-        }
-
-        /* ========== COUNTER ANIMATION ========== */
-        document.querySelectorAll('[data-count]').forEach(el => {
-            const target = parseFloat(el.dataset.count);
-            const suffix = el.dataset.suffix || '';
-            const isDecimal = String(target).includes('.');
-            if (!canAnimate) {
-                el.textContent = (isDecimal ? target.toFixed(1) : Math.round(target)) + suffix;
-                return;
-            }
-            ScrollTrigger.create({
-                trigger: el,
-                start: 'top 87%',
-                once: true,
-                onEnter: () => {
-                    gsap.to({ val: 0 }, {
-                        val: target,
-                        duration: 2.2,
-                        ease: 'power2.out',
-                        onUpdate: function() {
-                            const v = this.targets()[0].val;
-                            el.textContent = (isDecimal ? v.toFixed(1) : Math.round(v)) + suffix;
-                        }
-                    });
-                }
-            });
-        });
-
-        /* ========== FEATURES (NORMAL SCROLL) ========== */
-        // Intentionally no pinned / horizontal scroll behavior here.
 
         /* ========== CTA FORM ========== */
-        document.getElementById('ctaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            this.style.display = 'none';
-            document.getElementById('ctaSuccess').style.display = 'block';
-        });
+        const WAITLIST_URL = 'https://script.google.com/macros/s/AKfycbxOhk4TaUJsavnkOuucuDTB-uw_Z4UbnDzQoial5fKG9NMlR1j2NeHX6Cg_K1awCPOT/exec';
+        const THROTTLE_MS = 30000;
+        (function() {
+            var form = document.getElementById('ctaForm');
+            var msg = document.getElementById('ctaMsg');
+            if (!form || !msg) return;
+            var btn = form.querySelector('.cta-submit');
+            var input = form.querySelector('.cta-input');
+            if (!btn || !input) return;
+            var pageLoadTime = Date.now();
+            var typoConfirmed = false;
+
+            var TYPO_MAP = {
+                'gmial.com':'gmail.com', 'gmal.com':'gmail.com', 'gmaul.com':'gmail.com',
+                'gnail.com':'gmail.com', 'gmali.com':'gmail.com', 'gmill.com':'gmail.com',
+                'gamil.com':'gmail.com', 'gmail.co':'gmail.com', 'gmai.com':'gmail.com',
+                'gmail.om':'gmail.com', 'gmail.cm':'gmail.com', 'gmail.con':'gmail.com',
+                'outloook.com':'outlook.com', 'outlok.com':'outlook.com', 'outllok.com':'outlook.com',
+                'outlook.co':'outlook.com', 'otlook.com':'outlook.com', 'outlookcom':'outlook.com',
+                'hotmal.com':'hotmail.com', 'hotmial.com':'hotmail.com', 'hotmai.com':'hotmail.com',
+                'hotamil.com':'hotmail.com', 'hotmail.co':'hotmail.com', 'hotmail.con':'hotmail.com',
+                'yahooo.com':'yahoo.com', 'yaho.com':'yahoo.com', 'yahho.com':'yahoo.com',
+                'yahoo.co':'yahoo.com', 'yaoo.com':'yahoo.com',
+                'iclod.com':'icloud.com', 'icloud.co':'icloud.com', 'icoud.com':'icloud.com'
+            };
+
+            function checkTypo(email) {
+                var domain = email.split('@')[1];
+                if (!domain) return null;
+                domain = domain.toLowerCase();
+                return TYPO_MAP[domain] || null;
+            }
+
+            function showMsg(key, type) {
+                var lang = root.lang || 'en';
+                msg.textContent = translate(key, lang);
+                msg.className = 'cta-msg ' + type;
+                requestAnimationFrame(function() { msg.classList.add('visible'); });
+            }
+            function showMsgText(text, type) {
+                msg.textContent = text;
+                msg.className = 'cta-msg ' + type;
+                requestAnimationFrame(function() { msg.classList.add('visible'); });
+            }
+            function hideMsg() {
+                msg.classList.remove('visible');
+            }
+            function setLoading(on) {
+                btn.disabled = on;
+                input.disabled = on;
+                if (on) {
+                    btn.innerHTML = '<span class="cta-spinner"></span>';
+                } else {
+                    btn.textContent = translate('cta.submit', root.lang || 'en');
+                }
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var hp = form.querySelector('[name="website"]');
+                if (hp && hp.value) return;
+                hideMsg();
+                var email = input.value.trim();
+                var fix = checkTypo(email);
+                if (fix && !typoConfirmed) {
+                    var lang = root.lang || 'en';
+                    var suggested = email.replace(/@.+$/, '@' + fix);
+                    var typoText = translate('cta.typo', lang).replace('{email}', suggested);
+                    showMsgText(typoText, 'error');
+                    typoConfirmed = true;
+                    return;
+                }
+                typoConfirmed = false;
+                var last = parseInt(storageGet(localStorage, 'wb_wl_ts') || '0', 10);
+                if (Date.now() - last < THROTTLE_MS) {
+                    showMsg('cta.throttle', 'error');
+                    return;
+                }
+                setLoading(true);
+                storageSet(localStorage, 'wb_wl_ts', String(Date.now()));
+                var params = new URLSearchParams();
+                params.set('email', email);
+                params.set('lang', root.lang || 'en');
+                params.set('referrer', document.referrer || '');
+                params.set('screen', screen.width + 'x' + screen.height);
+                try { params.set('timezone', Intl.DateTimeFormat().resolvedOptions().timeZone); } catch(e) {}
+                params.set('locale', navigator.language || '');
+                params.set('time_on_page', Math.round((Date.now() - pageLoadTime) / 1000) + 's');
+                var uad = navigator.userAgentData;
+                params.set('platform', (uad && uad.platform) || navigator.platform || '');
+                var browser = '';
+                if (uad && uad.brands && uad.brands.length) {
+                    browser = uad.brands.map(function(b) { return b.brand; }).filter(function(b) { return b.indexOf('Not') === -1; }).join(', ');
+                } else {
+                    var ua = navigator.userAgent || '';
+                    if (ua.indexOf('Firefox/') > -1) browser = 'Firefox';
+                    else if (ua.indexOf('Safari/') > -1 && ua.indexOf('Chrome') === -1) browser = 'Safari';
+                    else if (ua.indexOf('Chrome/') > -1) browser = 'Chrome';
+                    else if (ua.indexOf('Edg/') > -1) browser = 'Edge';
+                }
+                params.set('browser', browser);
+                params.set('page', location.pathname + location.search);
+                var sp = new URLSearchParams(location.search);
+                ['utm_source','utm_medium','utm_campaign'].forEach(function(k) {
+                    if (sp.get(k)) params.set(k, sp.get(k));
+                });
+                params.set('country', storageGet(sessionStorage, 'wb_country') || '');
+                params.set('city', storageGet(sessionStorage, 'wb_city') || '');
+                fetch(WAITLIST_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: params.toString()
+                }).then(function() {
+                    setLoading(false);
+                    input.value = '';
+                    form.style.opacity = '0.5';
+                    form.style.pointerEvents = 'none';
+                    showMsg('cta.success', 'success');
+                }).catch(function() {
+                    setLoading(false);
+                    showMsg('cta.error', 'error');
+                });
+            });
+            input.addEventListener('input', function() {
+                if (typoConfirmed) { typoConfirmed = false; hideMsg(); }
+            });
+        })();
 
         /* ========== HERO CANVAS (Neural Network / Data Constellation) ========== */
         (function() {
@@ -2115,11 +2686,10 @@
             }
 
             function targetCounts() {
-                const small = window.innerWidth < 700;
                 const area = Math.max(1, (w || window.innerWidth) * (h || window.innerHeight));
                 const areaFactor = clamp(Math.sqrt(area / (900 * 700)), 0.85, 1.25);
-                const baseNodes = small ? 62 : 92;
-                const baseParticles = small ? 42 : 76;
+                const baseNodes = 92;
+                const baseParticles = 76;
                 return {
                     nodes: Math.round(clamp(baseNodes * crowd * areaFactor, 34, 150)),
                     particles: Math.round(clamp(baseParticles * crowd * areaFactor, 18, 110))
@@ -2131,8 +2701,7 @@
             const particles = [];
 
             function spawnNode() {
-                const small = window.innerWidth < 700;
-                const hubChance = (small ? 0.14 : 0.18) * Math.min(1.25, crowd);
+                const hubChance = 0.18 * Math.min(1.25, crowd);
                 const labelChance = 0.10 * Math.min(1.35, crowd);
                 const isHub = Math.random() < hubChance;
                 return {
@@ -2681,17 +3250,20 @@
                 }
             }
 
-            function drawHUD(t) {
-                ctx.font = '10px "JetBrains Mono", monospace';
-                ctx.fillStyle = 'rgba(' + ACCENT_RGB + ',0.4)';
-                const f = Math.floor(t * 25) % 10000;
-                ctx.fillText('FRM: ' + String(f).padStart(5, '0'), 12, h - 14);
-                ctx.fillStyle = 'rgba(226,232,240,0.25)';
-                ctx.fillText('TRK: 22/22  |  KP: 374  |  LAT: 0.031s', 100, h - 14);
-                ctx.fillStyle = 'rgba(' + ACCENT_RGB + ',0.5)';
-                const modeLabel = (pitchMode || 'skeleton').toUpperCase();
-                ctx.fillText('\u25CF ' + modeLabel, w - 110, h - 14);
-            }
+	            function drawHUD(time) {
+	                ctx.font = '10px "JetBrains Mono", monospace';
+	                ctx.fillStyle = 'rgba(' + ACCENT_RGB + ',0.4)';
+	                const f = Math.floor(time * 25) % 10000;
+	                ctx.fillText('FRM: ' + String(f).padStart(5, '0'), 12, h - 14);
+	                ctx.fillStyle = 'rgba(226,232,240,0.25)';
+	                ctx.fillText('TRK: 22/22  |  KP: 374  |  LAT: 0.031s', 100, h - 14);
+	                ctx.fillStyle = 'rgba(' + ACCENT_RGB + ',0.5)';
+	                const lang = root.lang || 'en';
+	                const locale = lang === 'tr' ? 'tr-TR' : (lang === 'de' ? 'de-DE' : 'en-US');
+	                const modeKey = pitchMode === 'space' ? 'preview.mode_space' : (pitchMode === 'predict' ? 'preview.mode_predict' : 'preview.mode_skeleton');
+	                const modeLabel = String(translate(modeKey, lang) || (pitchMode || 'skeleton')).toLocaleUpperCase(locale);
+	                ctx.fillText('\u25CF ' + modeLabel, w - 110, h - 14);
+	            }
 
             function animate(ts) {
                 const t = (ts || 0) * 0.001;
@@ -2733,7 +3305,7 @@
         /* ========== CARD SPOTLIGHT ========== */
         (function initCardSpotlight() {
             if (!window.matchMedia('(pointer: fine)').matches) return;
-            const cards = Array.from(document.querySelectorAll('.feature-card, .audience-card, .tech-card, .founder-card, .cta-box, .preview-window'));
+            const cards = Array.from(document.querySelectorAll('.cap-card, .audience-card, .tech-card, .founder-card, .cta-box, .preview-window'));
             if (!cards.length) return;
             cards.forEach(c => c.classList.add('card-spotlight'));
 
@@ -2763,48 +3335,10 @@
                     card.style.removeProperty('--my');
                 });
             });
-        })();
+	        })();
 
-        /* ========== 3D TILT CARDS ========== */
-        if (canAnimate && window.matchMedia('(pointer: fine)').matches) {
-            document.querySelectorAll('.audience-card, .tech-card, .founder-card').forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    if (card.classList.contains('reveal')) return;
-                    card.style.transition = 'border-color 0.4s, box-shadow 0.4s';
-                });
-                card.addEventListener('mousemove', e => {
-                    if (card.classList.contains('reveal')) return;
-                    const rect = card.getBoundingClientRect();
-                    const x = (e.clientX - rect.left) / rect.width - 0.5;
-                    const y = (e.clientY - rect.top) / rect.height - 0.5;
-                    card.style.transform = 'perspective(800px) rotateY(' + (x * 5) + 'deg) rotateX(' + (-y * 5) + 'deg) translateY(-4px)';
-                });
-                card.addEventListener('mouseleave', () => {
-                    if (card.classList.contains('reveal')) return;
-                    card.style.transition = 'transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), border-color 0.4s, box-shadow 0.4s';
-                    card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0px)';
-                    setTimeout(() => { card.style.transition = ''; card.style.transform = ''; }, 520);
-                });
-            });
-        }
-
-        /* ========== MAGNETIC BUTTONS ========== */
-        if (canAnimate && window.matchMedia('(pointer: fine)').matches) {
-            document.querySelectorAll('.magnetic').forEach(btn => {
-                btn.addEventListener('mousemove', e => {
-                    const rect = btn.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    gsap.to(btn, { x: x * 0.15, y: y * 0.15, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
-                });
-                btn.addEventListener('mouseleave', () => {
-                    gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)', overwrite: 'auto' });
-                });
-            });
-        }
-
-        /* ========== SMOOTH SCROLL NAV LINKS ========== */
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+	        /* ========== SMOOTH SCROLL NAV LINKS ========== */
+	        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
                 if (!href || href === '#') {
