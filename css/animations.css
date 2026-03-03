@@ -1,0 +1,45 @@
+/* ========== KEYFRAME ANIMATIONS ========== */
+
+@keyframes aurora-drift {
+    0%   { transform: translate3d(-2%, -1%, 0) scale(1); }
+    100% { transform: translate3d(2%, 1%, 0) scale(1.04); }
+}
+
+@keyframes hero-grid-float {
+    0% { transform: translate3d(-1.2%, -0.8%, 0) scale(1); }
+    100% { transform: translate3d(1.2%, 0.8%, 0) scale(1.02); }
+}
+
+@keyframes hero-grad-1 {
+    from { transform: translate3d(0,0,0) scale(1); }
+    to { transform: translate3d(6%, 3%, 0) scale(1.06); }
+}
+
+@keyframes hero-grad-2 {
+    from { transform: translate3d(0,0,0) scale(1); }
+    to { transform: translate3d(-5%, -4%, 0) scale(1.08); }
+}
+
+@keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0,232,123,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(0,232,123,0); }
+}
+
+@keyframes scroll-line {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+    50% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes how-flow {
+    from { background-position: 0 0; }
+    to { background-position: 260px 0; }
+}
+
+@keyframes cta-spin {
+    to { transform: rotate(360deg); }
+}

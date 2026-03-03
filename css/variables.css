@@ -1,0 +1,56 @@
+/* ==========================================================
+   MASTER THEME — Edit these values to reskin the entire site.
+   All colors, surfaces, and accents derive from here.
+   ========================================================== */
+:root {
+    /* ---- HERO BACKGROUND DENSITY (0.6 — 1.8 recommended) ---- */
+    --hero-crowd: 1.25;
+
+    /* ---- Brand palette ---- */
+    --accent:       #63FF4B; /* Neon pitch */
+    --accent-hover: #7CFF66;
+    --violet:       #B455FF; /* Neon AI */
+    --blue:         #2DD4BF;
+    --amber:        #F59E0B;
+    --red:          #EF4444;
+
+    /* ---- RGB helpers (keep in sync with above for gradients) ---- */
+    --accent-rgb: 99,255,75;
+    --violet-rgb: 180,85,255;
+    --blue-rgb:   45,212,191;
+    --amber-rgb:  245,158,11;
+    --red-rgb:    239,68,68;
+
+    /* ---- Surfaces ---- */
+    --bg:        #05060A;
+    --bg-rgb:    5,6,10;
+    --surface:   #0A0E1A;
+    --surface-2: #121A2B;
+
+    /* ---- Typography ---- */
+    --text:       #E2E8F0;
+    --text-dim:   rgba(226,232,240,0.55);
+    --text-muted: rgba(226,232,240,0.22);
+
+    /* ---- Borders & chrome ---- */
+    --border: rgba(255,255,255,0.065);
+
+    /* ---- Layout tokens ---- */
+    --layout-max-w: 1120px;
+    --nav-h:      72px;
+    --safe-top:   env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --nav-total-h: calc(var(--nav-h) + var(--safe-top));
+    --section-py: clamp(80px, 12vw, 160px);
+
+    /* ---- Derived glow tokens (auto-adapts per theme) ---- */
+    --accent-glow: rgba(var(--accent-rgb), 0.26);
+    --violet-glow: rgba(var(--violet-rgb), 0.22);
+}
+
+@supports (color: color-mix(in srgb, white 50%, black)) {
+    :root {
+        --accent-glow: color-mix(in srgb, var(--accent) 26%, transparent);
+        --violet-glow: color-mix(in srgb, var(--violet) 22%, transparent);
+    }
+}
